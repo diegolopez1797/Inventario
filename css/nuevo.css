@@ -1,0 +1,100 @@
+.menuCSS3 ul {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+      }
+      .menuCSS3 a {
+            display: block;
+            padding: 2em;
+            background-color: #88b341;
+            text-decoration: none;
+            color: #191C26;
+            text-align: center;
+      }
+      .menuCSS3 a:hover {
+            background-color: #CC673B;
+      }
+      .menuCSS3 ul li ul {
+            display: none;
+      }
+      .menuCSS3 ul li a:hover + ul, .menuCSS3 ul li ul:hover {
+            display: block;
+      }
+
+.menuCSS3 {
+      float: right;
+}
+
+nav ul li {
+                  display: block;
+                  line-height: 20px;
+                  width: 200px;
+            }
+
+
+
+#main-header {
+      background: #88b341;
+      color: black;
+      height: 84px;
+}     
+      #main-header a {
+            font-size: 100%;
+            color: white;
+      }
+
+
+#boton-cerrar {
+      float: right;
+      background-color: #EC2222;
+      border: 0px;
+}
+      #boton-cerrar:hover {
+            background: #B82B2B;
+      }
+
+
+#logo-header {
+      float: left;
+      padding: 10px 0 0 20px;
+      text-decoration: none;
+}
+      #logo-header:hover {
+            color: black;
+      }
+      
+      #logo-header .site-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.6em;
+      }
+      
+      #logo-header .site-desc {
+            display: block;
+            font-weight: 300;
+            font-size: 0.8em;
+            color: black;
+      }
+
+logo-header {
+      float: left;
+      padding: 10px 0 0 20px;
+      text-decoration: none;
+}
+      #logo-header:hover {
+            color: black;
+      }
+      
+      #logo-header .site-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.6em;
+      }
+      
+      #logo-header .site-desc {
+            display: block;
+            font-weight: 300;
+            font-size: 0.8em;
+            color: black;
+      }

@@ -1,0 +1,87 @@
+      .menuCSS3 ul {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            justify-content: center;
+      }
+      .menuCSS3 a {
+            width: 100%;
+            display: block;
+            padding: 1.4em;
+            background-color: #88b341;
+            text-decoration: none;
+            color: #191C26;
+            text-align: center;
+      }
+      .menuCSS3 a:hover {
+            background-color: #CC673B;
+      }
+      .menuCSS3 ul li ul {
+            display: none;
+      }
+      .menuCSS3 ul li a:hover + ul, .menuCSS3 ul li ul:hover {
+            display: block;
+      }
+
+
+
+
+#boton-cerrar {
+      float: right;
+      background-color: #EC2222;
+      border: 0px;
+}
+      #boton-cerrar:hover {
+            background: #B82B2B;
+      }
+
+
+
+
+
+#main-header {
+      background: #88b341;
+      color: black;
+}     
+      #main-header a {
+            font-size: 100%;
+            color: white;
+      }
+
+#logo-header {
+      float: left;
+      padding: 10px 0 0 20px;
+      text-decoration: none;
+}
+      #logo-header:hover {
+            color: black;
+      }
+      
+      #logo-header .site-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.6em;
+      }
+      
+      #logo-header .site-desc {
+            display: block;
+            font-weight: 300;
+            font-size: 0.8em;
+            color: black;
+      }
+
+logo-header {
+      float: left;
+      padding: 10px 0 0 20px;
+      text-decoration: none;
+}
+      #logo-header:hover {
+            color: black;
+      }
+      
+      #logo-header .site-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.3em;
+      }
