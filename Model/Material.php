@@ -9,15 +9,19 @@ class Material
 	private $Descripcion;
 	private $Unidad;
 	private $Saldo;
+	private $MinAlmacen;
+	private $MaxCasa;
 
 	
-	function __construct($Id, $Codigo, $Descripcion, $Unidad, $Saldo)
+	function __construct($Id, $Codigo, $Descripcion, $Unidad, $Saldo, $MinAlmacen, $MaxCasa)
 	{
 		$this->setId($Id);
 		$this->setCodigo($Codigo);
 		$this->setDescripcion($Descripcion);
 		$this->setUnidad($Unidad);
-		$this->setSaldo($Saldo);		
+		$this->setSaldo($Saldo);
+		$this->setMinAlmacen($MinAlmacen);
+		$this->setMaxCasa($MaxCasa);		
 	}
 
 	public function getId(){
@@ -60,6 +64,22 @@ class Material
 		$this->Saldo = $Saldo;
 	}
 
+	public function getMinAlmacen(){
+		return $this->MinAlmacen;
+	}
+
+	public function setMinAlmacen($MinAlmacen){
+		$this->MinAlmacen = $MinAlmacen;
+	}
+
+	public function getMaxCasa(){
+		return $this->MaxCasa;
+	}
+
+	public function setMaxCasa($MaxCasa){
+		$this->MaxCasa = $MaxCasa;
+	}
+
 
 	public static function ingresoMaterial($id, $nuevoSaldo){
 		$db=Db::getConnect();
@@ -89,7 +109,7 @@ class Material
 		$select = $db->query('SELECT * FROM material order by ID');
 
 		foreach($select->fetchAll() as $material){
-			$listaMaterial[] = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo']);
+			$listaMaterial[] = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo'],$material['Min_Almacen'],$material['Max_Casa']);
 		}
 		return $listaMaterial;
 	}
@@ -103,7 +123,7 @@ class Material
 		$material = $select->fetch();
 
 
-		$listaMaterial = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo']);
+		$listaMaterial = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo'],$material['Min_Almacen'],$material['Max_Casa']);
 		
 		return $listaMaterial;
 
@@ -119,7 +139,7 @@ class Material
 		$material = $select->fetch();
 
 
-		$listaMaterial = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo']);
+		$listaMaterial = new Material($material['ID'],$material['Codigo'],$material['Descripcion'],$material['Unidad'],$material['Saldo'],$material['Min_Almacen'],$material['Max_Casa']);
 		//var_dump($alumno);
 		//die();
 		return $listaMaterial;

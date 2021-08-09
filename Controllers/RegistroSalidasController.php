@@ -1,4 +1,6 @@
 <?php 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 /**
 *  Autor: JUAN DIEGO LOPEZ BARRAGAN
 */
@@ -128,10 +130,33 @@ if (isset($_SESSION['usuario'])) {
 					//todas las salidas del mismo material
 					$saldoMaterial = Material::searchById($id);
 					$saldo = $saldoMaterial->getSaldo();
+					$minAlmacen = $saldoMaterial->getMinAlmacen();
+					$descripcion = $saldoMaterial->getDescripcion();
+					$unidad = $saldoMaterial->getUnidad();
 					$cantidad = $listaCantidad[$i];
 
 					$nuevoSaldo = $saldo - $cantidad;
 					Material::ingresoMaterial($id, $nuevoSaldo);
+
+					if ($nuevoSaldo <= $minAlmacen) {
+						# code...
+						$oMail = new PHPMailer();
+						$oMail->isSMTP();
+						$oMail->Host = "smtp.gmail.com";
+						$oMail->Port = 587;
+						$oMail->SMTPSecure = "tls";
+						$oMail->SMTPAuth = true;
+						$oMail->Username = "diegolopez1797@gmail.com";
+						$oMail->Password = "jdlbK_32125631087";
+						$oMail->setFrom("diegolopez1797@gmail.com", "Juan Diego");
+						$oMail->addAddress("u20161145407@usco.edu.co");
+						$oMail->Subject = "ALMACEN BERDEZ INFORMA";
+						$oMail->msgHTML("¡¡¡ ALERTA !!! La cantidad de ".$descripcion." es de ".$nuevoSaldo." ".$unidad.". Por debajo o igual a ".$minAlmacen.", que es la cantidad minima que deberia existir en el almacen.");
+
+						if (!$oMail->send()) {
+							echo $oMail->ErrorInfo;
+						}
+					}
 
 					$i = $i + 1;
 					
@@ -170,6 +195,8 @@ if (isset($_SESSION['usuario'])) {
 
 				
 				echo "<script>alert('¡ Material Sacado EXITOSAMENTE !')</script>";
+
+				
 
 				echo "<script>window.open('Controllers/SalidaMaterialPDF.php', '_blank')</script>";
 			
@@ -210,6 +237,27 @@ if (isset($_SESSION['usuario'])) {
 
 		}
 	
+	}
+
+	function notificacion($descripcion, $saldo){
+		//Enviar correo 
+
+		$oMail = new PHPMailer();
+		$oMail->isSMTP();
+		$oMail->Host = "smtp.gmail.com";
+		$oMail->Port = 587;
+		$oMail->SMTPSecure = "tls";
+		$oMail->SMTPAuth = true;
+		$oMail->Username = "diegolopez1797@gmail.com";
+		$oMail->Password = "jdlbK_32125631087";
+		$oMail->setFrom("diegolopez1797@gmail.com", "Juan Diego");
+		$oMail->addAddress("u20161145407@usco.edu.co");
+		$oMail->Subject = "¡¡¡ Almacen Berdez INFORMA !!!";
+		$oMail->msgHTML("Material por debajo del minimo");
+
+		if (!$oMail->send()) {
+			echo $oMail->ErrorInfo;
+		}
 	}
 
 	function show(){
