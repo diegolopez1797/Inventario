@@ -27,7 +27,7 @@ require_once('Model/InformeSalidaPorFecha.php');
 require_once('Model/InformeEntradaPorMaterialFecha.php');
 require_once('Model/InformeSalidaPorMaterialFecha.php');
 require_once('Model/InformeMaterialPorExistencia.php');
-//error_reporting(0);
+error_reporting(0);
 session_start();
 ?>
 
