@@ -22,7 +22,7 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function save(){
-		$material = new Material(null,$_POST['codigo'],$_POST['descripcion'],$_POST['unidad'],null);
+		$material = new Material(null,$_POST['codigo'],$_POST['descripcion'],$_POST['unidad'],null,$_POST['min'],$_POST['max']);
 		$respuesta = Material::save($material);
 
 		if(isset($respuesta)){
@@ -50,7 +50,7 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function update(){
-		$material = new Material($_POST['id'],$_POST['codigo'],$_POST['descripcion'],$_POST['unidad'],$_POST['saldo']);
+		$material = new Material($_POST['id'],$_POST['codigo'],$_POST['descripcion'],$_POST['unidad'],$_POST['saldo'],$_POST['min'],$_POST['max']);
 		Material::update($material);
 		$this->show();
 	}

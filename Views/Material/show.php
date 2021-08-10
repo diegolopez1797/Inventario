@@ -28,6 +28,8 @@
 					<th>Codigo</th>
 					<th>Descripcion</th>
 					<th>Unidad</th>
+					<th>Min Alm</th>
+					<th>Max Casa</th>
 					<th>Acciones</th>
 				</tr>
 				<tbody>
@@ -36,6 +38,8 @@
 						<td><?php echo $material->getCodigo(); ?></td>
 						<td><?php echo $material->getDescripcion(); ?></td>
 						<td><?php echo $material->getUnidad(); ?></td>
+						<td><?php echo $material->getMinAlmacen(); ?></td>
+						<td><?php echo $material->getMaxCasa(); ?></td>
 						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Material&&action=updateshow&&id=<?php echo $material->getId() ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
 						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Material&&action=delete&&id=<?php echo $material->getId() ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>

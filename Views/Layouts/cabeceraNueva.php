@@ -37,6 +37,7 @@
                     <ul>
                         <li><a href="?controller=InformeGeneral&action=show">Completo</a></li>
                         <li><a href="?controller=InformeMaterialPorExistencia&action=show">Existente</a></li>
+                        <li><a href="?controller=InformeMaterialPorCompra&action=show">Por compra</a></li>
                     </ul>
                 </li>
                 <li><a href="?controller=Material&action=show">Gestion Material</a></li>

@@ -140,22 +140,7 @@ if (isset($_SESSION['usuario'])) {
 
 					if ($nuevoSaldo <= $minAlmacen) {
 						# code...
-						$oMail = new PHPMailer();
-						$oMail->isSMTP();
-						$oMail->Host = "smtp.gmail.com";
-						$oMail->Port = 587;
-						$oMail->SMTPSecure = "tls";
-						$oMail->SMTPAuth = true;
-						$oMail->Username = "diegolopez1797@gmail.com";
-						$oMail->Password = "jdlbK_32125631087";
-						$oMail->setFrom("diegolopez1797@gmail.com", "Juan Diego");
-						$oMail->addAddress("u20161145407@usco.edu.co");
-						$oMail->Subject = "ALMACEN BERDEZ INFORMA";
-						$oMail->msgHTML("¡¡¡ ALERTA !!! La cantidad de ".$descripcion." es de ".$nuevoSaldo." ".$unidad.". Por debajo o igual a ".$minAlmacen.", que es la cantidad minima que deberia existir en el almacen.");
-
-						if (!$oMail->send()) {
-							echo $oMail->ErrorInfo;
-						}
+						$this->notificacion($descripcion, $nuevoSaldo, $unidad, $minAlmacen);
 					}
 
 					$i = $i + 1;
@@ -239,7 +224,7 @@ if (isset($_SESSION['usuario'])) {
 	
 	}
 
-	function notificacion($descripcion, $saldo){
+	function notificacion($descripcion, $nuevoSaldo, $unidad, $minAlmacen){
 		//Enviar correo 
 
 		$oMail = new PHPMailer();
@@ -248,12 +233,12 @@ if (isset($_SESSION['usuario'])) {
 		$oMail->Port = 587;
 		$oMail->SMTPSecure = "tls";
 		$oMail->SMTPAuth = true;
-		$oMail->Username = "diegolopez1797@gmail.com";
-		$oMail->Password = "jdlbK_32125631087";
-		$oMail->setFrom("diegolopez1797@gmail.com", "Juan Diego");
+		$oMail->Username = "sistemasberdez@gmail.com";
+		$oMail->Password = "berdez2021";
+		$oMail->setFrom("sistemasberdez@gmail.com", "Almacen Berdez");
 		$oMail->addAddress("u20161145407@usco.edu.co");
-		$oMail->Subject = "¡¡¡ Almacen Berdez INFORMA !!!";
-		$oMail->msgHTML("Material por debajo del minimo");
+		$oMail->Subject = "ALMACEN INFORMA";
+		$oMail->msgHTML("¡¡¡ ALERTA !!! La cantidad de ".$descripcion." es de ".$nuevoSaldo." ".$unidad.". Por debajo o igual a ".$minAlmacen.", que es la cantidad minima que deberia existir en el almacen.");
 
 		if (!$oMail->send()) {
 			echo $oMail->ErrorInfo;

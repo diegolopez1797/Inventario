@@ -2,10 +2,7 @@
 	<h2>Editar Material</h2>
 	<form action="?controller=Material&&action=update" method="POST">
 		<input type="hidden" name="id" id="id" value="<?php echo $material->getId(); ?>" >
-		<div class="form-group">
-			<label for="text">Codigo</label>
-			<input type="number" name="codigo" id="codigo" class="form-control" value="<?php echo $material->getCodigo(); ?>" required>
-		</div>
+		<input type="hidden" name="codigo" id="codigo" value="<?php echo $material->getCodigo(); ?>" >
 
 		<div class="form-group">
 			<label for="text">Descripcion</label>
@@ -15,6 +12,16 @@
 		<div class="form-group">
 			<label for="text">Unidad</label>
 			<input type="text" name="unidad" id="unidad" class="form-control" value="<?php echo $material->getUnidad(); ?>" required>
+		</div>
+
+		<div class="form-group">
+			<label for="text">Min Almacen</label>
+			<input type="text" name="min" id="min" class="form-control" value="<?php echo $material->getMinAlmacen(); ?>" required>
+		</div>
+
+		<div class="form-group">
+			<label for="text">Max Casa</label>
+			<input type="text" name="max" id="max" class="form-control" value="<?php echo $material->getMaxCasa(); ?>" required>
 		</div>
 
 		<input type="hidden" name="saldo" id="saldo" value="<?php echo $material->getSaldo(); ?>" >

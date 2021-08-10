@@ -18,6 +18,7 @@ $controllers=array(
 	'Login'=>['show','verificar','entrar','salir'],
 	'Usuario'=>['show','register','save','delete','update','updateshow','search'],
 	'InformeMaterialPorExistencia'=>['show','search','generarPDF','eliminar'],
+	'InformeMaterialPorCompra'=>['show','search','generarPDF','eliminar'],
 	'InformeEntradaPorMaterialFecha'=>['show','search','eliminar','generarPDF'],
 	'InformeSalidaPorMaterialFecha'=>['show','search','eliminar','generarPDF'],
 	'InformeEntradaPorFecha'=>['show','search','eliminar','generarPDF'],
@@ -104,6 +105,10 @@ function call($controller, $action){
 		case 'InformeMaterialPorExistencia';
 		require_once('Model/InformeMaterialPorExistencia.php');
 		$controller = new InformeMaterialPorExistenciaController();
+		break;
+		case 'InformeMaterialPorCompra';
+		require_once('Model/InformeMaterialPorCompra.php');
+		$controller = new InformeMaterialPorCompraController();
 		break;
 		case 'InformeEntradaPorMaterialFecha';
 		require_once('Model/InformeEntradaPorMaterialFecha.php');

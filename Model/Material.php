@@ -93,10 +93,12 @@ class Material
 	public static function save($material){
 		$db=Db::getConnect();
 		
-		$insert=$db->prepare('INSERT INTO material VALUES (null,:Codigo,:Descripcion,:Unidad,null)');
+		$insert=$db->prepare('INSERT INTO material VALUES (null,:Codigo,:Descripcion,:Unidad,null,:Min_Almacen,:Max_Casa)');
 		$insert->bindValue('Codigo',$material->getCodigo());
 		$insert->bindValue('Descripcion',$material->getDescripcion());
 		$insert->bindValue('Unidad',$material->getUnidad());
+		$insert->bindValue('Min_Almacen',$material->getMinAlmacen());
+		$insert->bindValue('Max_Casa',$material->getMaxCasa());
 		$insert->execute();
 
 		return $insert;
@@ -149,12 +151,14 @@ class Material
 
 	public static function update($material){
 		$db=Db::getConnect();
-		$update=$db->prepare('UPDATE material SET Codigo=:Codigo, Descripcion=:Descripcion, Unidad=:Unidad, Saldo=:Saldo WHERE ID=:ID');
+		$update=$db->prepare('UPDATE material SET Codigo=:Codigo, Descripcion=:Descripcion, Unidad=:Unidad, Saldo=:Saldo, Max_Casa=:Max_Casa, Min_Almacen=:Min_Almacen WHERE ID=:ID');
 		$update->bindValue('Codigo', $material->getCodigo());
 		$update->bindValue('Descripcion', $material->getDescripcion());
 		$update->bindValue('Unidad',$material->getUnidad());
 		$update->bindValue('Saldo',$material->getSaldo());
 		$update->bindValue('ID',$material->getId());
+		$update->bindValue('Max_Casa',$material->getMaxCasa());
+		$update->bindValue('Min_Almacen',$material->getMinAlmacen());
 		$update->execute();
 	}
 
@@ -167,5 +171,6 @@ class Material
 		return $delete;	
 	}
 }
+
 
 ?>
