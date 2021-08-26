@@ -234,7 +234,7 @@ if (isset($_SESSION['usuario'])) {
 		$oMail->SMTPSecure = "tls";
 		$oMail->SMTPAuth = true;
 		$oMail->Username = "sistemasberdez@gmail.com";
-		$oMail->Password = "berdez2021";
+		$oMail->Password = "";
 		$oMail->setFrom("sistemasberdez@gmail.com", "Almacen Berdez");
 		$oMail->addAddress("u20161145407@usco.edu.co");
 		$oMail->Subject = "ALMACEN INFORMA";
