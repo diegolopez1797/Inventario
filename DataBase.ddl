@@ -1,5 +1,3 @@
-?heaas9bWtNozyDA
-
 CREATE TABLE Material (
   ID          int(10) NOT NULL AUTO_INCREMENT, 
   Codigo      int(10), 

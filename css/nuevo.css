@@ -7,13 +7,13 @@
       .menuCSS3 a {
             display: block;
             padding: 2em;
-            background-color: #88b341;
+            background-color: #223426;
             text-decoration: none;
             color: #191C26;
             text-align: center;
       }
       .menuCSS3 a:hover {
-            background-color: #CC673B;
+            background-color: #B1BBB2;
       }
       .menuCSS3 ul li ul {
             display: none;
@@ -35,7 +35,7 @@ nav ul li {
 
 
 #main-header {
-      background: #88b341;
+      background: #223426;
       color: black;
       height: 84px;
 }     

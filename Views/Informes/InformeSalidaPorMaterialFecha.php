@@ -17,7 +17,7 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-4">
-				<input type="date" name="fechaInicial" min="2021-03-00" max="2022-05-25" class="form-control"/>
+				<input type="date" name="fechaInicial" min="2021-03-00" max="2050-05-25" class="form-control"/>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -27,7 +27,7 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-4">
-				<input type="date" name="fechaFinal" min="2021-03-00" max="2022-05-25" class="form-control"/>
+				<input type="date" name="fechaFinal" min="2021-03-00" max="2050-05-25" class="form-control"/>
 			</div>
 		</div>
 		<div class="form-group row">

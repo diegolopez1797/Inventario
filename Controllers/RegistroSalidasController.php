@@ -233,10 +233,10 @@ if (isset($_SESSION['usuario'])) {
 		$oMail->Port = 587;
 		$oMail->SMTPSecure = "tls";
 		$oMail->SMTPAuth = true;
-		$oMail->Username = "sistemasberdez@gmail.com";
-		$oMail->Password = "";
-		$oMail->setFrom("sistemasberdez@gmail.com", "Almacen Berdez");
-		$oMail->addAddress("u20161145407@usco.edu.co");
+		$oMail->Username = "diegolopez1797@gmail.com";
+		$oMail->Password = "zvthrmbnsshmbzjs";
+		$oMail->setFrom("diegolopez1797@gmail.com", "Almacen Berdez");
+		$oMail->addAddress("diegolopez1797@gmail.com");
 		$oMail->Subject = "ALMACEN INFORMA";
 		$oMail->msgHTML("¡¡¡ ALERTA !!! La cantidad de ".$descripcion." es de ".$nuevoSaldo." ".$unidad.". Por debajo o igual a ".$minAlmacen.", que es la cantidad minima que deberia existir en el almacen.");
 

@@ -1,12 +1,14 @@
 
 <header id="main-header">
 
-    <a id="logo-header">
+    <!--<a id="logo-header">
         <span class="site-name">BERDEZ S.A.S</span>
         <span>ALMACEN</span>
     </a> <!-- / #logo-header -->
 
-    <a id="boton-cerrar" class="btn btn-outline-warning" href="?controller=Login&&action=salir"><span class="glyphicon glyphicon-log-out"> </span> Salir</a>
+    <a href="?controller=RegistroEntradas&action=show" id="logo-header">
+        <img src="/Berdez/fpdf/tutorial/logo.png" alt="Constructora Berdez">
+    </a>
 
     <nav class="menuCSS3">
             <ul>
@@ -61,4 +63,7 @@
                 ?>
             </ul>
     </nav>
+    
+    <a id="boton-cerrar" class="btn btn-outline-warning" href="?controller=Login&&action=salir"><span class="glyphicon glyphicon-log-out"> </span> Salir</a>
+
 </header>
