@@ -16,6 +16,8 @@ class RegistroEntradasController{
 			
 			$listaMaterial = $_SESSION['listaMaterial'];
 			$listaCantidad = $_SESSION['listaCantidad'];
+			$seleccionDestino = $_SESSION['seleccionDestinoEntrada'];
+			$listaSeleccionDestino = $_SESSION['listaSeleccionDestinoEntrada'];
 			$fechaActual = date('Y-m-d');
 			$hora = date('H:i:s');
 			$usuario = $_SESSION['usuario']->getId();
@@ -27,6 +29,11 @@ class RegistroEntradasController{
 				if ($listaCantidad[$i] <= 0) {
 					$listaOk = false;
 				}
+
+				if ($listaSeleccionDestino[$i] == 0) {
+					$listaOk = false;
+				}
+
 				$i = $i + 1;
 
 			}
@@ -36,10 +43,12 @@ class RegistroEntradasController{
 
 				$i = 0;
 				foreach ($listaMaterial as $material) {
-					
-					
+
 					$id = $material->getId();
-					$saldo = $material->getSaldo();
+					//Se llama al material directamente de la base de datos para actualizar 
+					//todas las salidas del mismo material
+					$saldoMaterial = Material::searchById($id);
+					$saldo = $saldoMaterial->getSaldo();
 					$cantidad = $listaCantidad[$i];
 
 					$nuevoSaldo = $saldo + $cantidad;
@@ -61,8 +70,9 @@ class RegistroEntradasController{
 
 					$idMaterial = $material->getId();
 					$cantidad = $listaCantidad[$i];
+					$destino = $seleccionDestino[$i]->getId();
 					
-					$materialRegistroEntradas = new MaterialRegistroEntradas(null,$idMaterial,$idUltimaEntrada,$cantidad);
+					$materialRegistroEntradas = new MaterialRegistroEntradas(null,$idMaterial,$idUltimaEntrada,$cantidad,$destino);
 					MaterialRegistroEntradas::save($materialRegistroEntradas);
 
 					$i = $i + 1;
@@ -78,6 +88,7 @@ class RegistroEntradasController{
 			
 				unset($_SESSION['listaMaterial']);
 				unset($_SESSION['listaCantidad']);
+				unset($_SESSION['listaDestinoEntrada']);
 
 				
 				$this->show();
@@ -103,6 +114,10 @@ class RegistroEntradasController{
 	function show(){
 
 		// $listaMaterialCompleta = Material::all();
+		// Busqueda y carga de los rubros
+		$listaDestino = Destino::all();
+		$_SESSION['listaDestinoEntrada'] = $listaDestino;
+
 		require_once('Views/Entradas/entradas.php');
 	}
 
@@ -113,6 +128,23 @@ class RegistroEntradasController{
 		if (isset(($_REQUEST['btnIngresar']))) {
 
 			$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
+
+			$_SESSION['listaSeleccionDestinoEntrada'] = $_REQUEST['listaSeleccionDestinoEntrada'];
+
+			$seleccionDestino = [];
+
+			foreach ($_SESSION['listaSeleccionDestinoEntrada'] as $lista) {
+				if ($lista != 0) {
+					$destino = Destino::searchById($lista);
+					array_push ( $seleccionDestino , $destino );
+				}else{
+					$vacio = null;
+					array_push ( $seleccionDestino , $vacio );
+				}	
+			}
+
+			$_SESSION['seleccionDestinoEntrada'] = $seleccionDestino;
+
 			$this->save();
 
 			
@@ -140,10 +172,10 @@ class RegistroEntradasController{
 				$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
 				echo "<script>alert('¡ No a ingresado un codigo o el valor ingresado NO ES VALIDO !')</script>";
 
-			}elseif ($MaterialR == true){
+			//}elseif ($MaterialR == true){
 
-				$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
-				echo "<script>alert('¡ El material solicitado ya ha sido listado !')</script>";
+			//	$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
+			//	echo "<script>alert('¡ El material solicitado ya ha sido listado !')</script>";
 
 			}else{
 
@@ -153,6 +185,24 @@ class RegistroEntradasController{
 					array_push ( $listaMaterial , $material );
 					$_SESSION['listaMaterial'] = $listaMaterial;
 					$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
+
+					//RUBRO --------------------------------------------------------
+
+					$_SESSION['listaSeleccionDestinoEntrada'] = $_REQUEST['listaSeleccionDestinoEntrada'];
+
+					$seleccionDestino = [];
+
+					foreach ($_SESSION['listaSeleccionDestinoEntrada'] as $lista) {
+						if ($lista != 0) {
+							$destino = Destino::searchById($lista);
+							array_push ( $seleccionDestino , $destino );
+						}else{
+							$vacio = null;
+							array_push ( $seleccionDestino , $vacio );
+						}	
+					}
+
+					$_SESSION['seleccionDestinoEntrada'] = $seleccionDestino;
 					
 				}else{
 					echo "<script>alert('¡ El matarial buscado NO EXISTE !')</script>";
@@ -171,13 +221,16 @@ class RegistroEntradasController{
 
 		$listaMaterial = $_SESSION['listaMaterial'];
 		$listaCantidad = $_SESSION['listaCantidad'];
+		$seleccionDestinoEntrada = $_SESSION['seleccionDestinoEntrada'];
 
 		unset($listaMaterial[$i]);
 		unset($listaCantidad[$i]);
+		unset($seleccionDestinoEntrada[$i]);
 
 		try {
 			$_SESSION['listaMaterial'] = array_values($listaMaterial);
 			$_SESSION['listaCantidad'] = array_values($listaCantidad);
+			$_SESSION['seleccionDestinoEntrada'] = array_values($seleccionDestinoEntrada);
 		}catch (Error $e) {
 			
 		}

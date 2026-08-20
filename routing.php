@@ -7,6 +7,7 @@ $controllers=array(
 	'Contratista'=>['register','save','show','updateshow','update','delete','search', 'error'],
 	'Destino'=>['register','save','show','updateshow','update','delete','search', 'error'],
 	'Casa'=>['register','save','show','updateshow','update','delete','search', 'error'],
+	'Rubro'=>['register','save','show','updateshow','update','delete','search', 'error'],
 	'Manzana'=>['register','save','show','updateshow','update','delete','search', 'error'],
 	'Proyecto'=>['register','save','show','updateshow','update','delete','search', 'error'],
 	'RegistroEntradas'=>['save','show','searchMaterial','quitarMaterial'],
@@ -61,6 +62,10 @@ function call($controller, $action){
 		case 'Casa':
 		require_once('Model/Casa.php');
 		$controller = new CasaController();
+		break;	
+		case 'Rubro':
+		require_once('Model/Rubro.php');
+		$controller = new RubroController();
 		break;	
 		case 'Manzana':
 		require_once('Model/Manzana.php');

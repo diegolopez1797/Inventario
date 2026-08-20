@@ -18,7 +18,7 @@ function Header()
 {
 
     // Logo
-    $this->Image('../fpdf/tutorial/logo.png',12,12,50);
+    $this->Image(__DIR__ . '/../fpdf/tutorial/logoInf.png',12,12,50);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha

@@ -12,9 +12,10 @@ class InformeMaterialSalida
 	private $manzanaId;
 	private $destinoId;
 	private $areaId;
+	private $rubroId;
 
 	
-	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId)
+	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId, $rubroId)
 	{
 		$this->setID($Id);
 		$this->setMaterialId($MaterialId);
@@ -24,6 +25,7 @@ class InformeMaterialSalida
 		$this->setManzanaId($manzanaId);
 		$this->setDestinoId($destinoId);
 		$this->setAreaId($areaId);
+		$this->setRubroId($rubroId);
 	}
 
 	public function getId(){
@@ -87,6 +89,13 @@ class InformeMaterialSalida
 
 	public function setAreaId($areaId){
 		$this->areaId = $areaId;
+}
+	public function getRubroId(){
+	return $this->rubroId;
+	}
+
+	public function setRubroId($rubroId){
+		$this->rubroId = $rubroId;
 	}
 //--------------------------------------------------------------------------------------------------------
 
@@ -100,7 +109,7 @@ class InformeMaterialSalida
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID']);
+			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID']);
 
 		}
 		

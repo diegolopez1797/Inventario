@@ -12,9 +12,10 @@ class MaterialRegistroSalidas
 	private $manzanaId;
 	private $destinoId;
 	private $areaId;
+	private $rubroId;
 
 	
-	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId)
+	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId, $rubroId)
 	{
 		$this->setID($Id);
 		$this->setMaterialId($MaterialId);
@@ -24,6 +25,7 @@ class MaterialRegistroSalidas
 		$this->setManzanaId($manzanaId);
 		$this->setDestinoId($destinoId);
 		$this->setAreaId($areaId);
+		$this->setRubroId($rubroId);
 	}
 
 	public function getId(){
@@ -89,12 +91,18 @@ class MaterialRegistroSalidas
 		$this->areaId = $areaId;
 	}
 
+	public function getRubroId(){
+		return $this->rubroId;
+	}
 
+	public function setRubroId($rubroId){
+		$this->rubroId = $rubroId;
+	}
 
 	public static function save($materialRegistroSalidas){
 		$db=Db::getConnect();
 		
-		$insert=$db->prepare('INSERT INTO material_registro_salidas VALUES (null,:materialId,:registroSalidasId,:Cantidad,:Casa,:Manzana,:Destino,:Area)');
+		$insert=$db->prepare('INSERT INTO material_registro_salidas VALUES (null,:materialId,:registroSalidasId,:Cantidad,:Casa,:Manzana,:Destino,:Area,:Rubro)');
 
 		$insert->bindValue('materialId',$materialRegistroSalidas->getMaterialId());
 		$insert->bindValue('registroSalidasId',$materialRegistroSalidas->getRegistroSalidasId());
@@ -103,6 +111,7 @@ class MaterialRegistroSalidas
 		$insert->bindValue('Manzana',$materialRegistroSalidas->getManzanaId());
 		$insert->bindValue('Destino',$materialRegistroSalidas->getDestinoId());
 		$insert->bindValue('Area',$materialRegistroSalidas->getAreaId());
+		$insert->bindValue('Rubro',$materialRegistroSalidas->getRubroId());
 		$insert->execute();
 
 		return $insert;
@@ -118,7 +127,7 @@ class MaterialRegistroSalidas
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID']);
+			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID']);
 
 		}
 		

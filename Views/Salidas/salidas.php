@@ -81,6 +81,7 @@
 					<th>Unidad</th>
 					<th>Cantidad</th>
 					<th>Destino</th>
+					<th>Actividad</th>
 					<th>Casa</th>
 					<th>Manzana</th>
 					<th>Etapa</th>
@@ -112,6 +113,9 @@
 						  $listaSeleccionDestino = $_SESSION['listaSeleccionDestino'];
 						  $seleccionDestino = $_SESSION['seleccionDestino'];
 
+						  $listaSeleccionRubro = $_SESSION['listaSeleccionRubro'];
+						  $seleccionRubro = $_SESSION['seleccionRubro'];
+
 
 
 					?>
@@ -140,6 +144,23 @@
 										<?php foreach ($_SESSION['listaDestino'] as $destino){ ?>
 
 										<option value="<?php echo $destino->getId(); ?>"><?php echo $destino->getDescripcion(); ?></option>
+
+										<?php } ?>
+								</select>
+							</td>
+							<td>	
+								<select style="width : 100px" name="listaSeleccionRubro[<?php echo $i ?>]" class="form-control">
+										<?php if ($seleccionRubro[$i] != null) { ?>
+
+										<option selected="" value="<?php echo $seleccionRubro[$i]->getId(); ?>"><?php echo $seleccionRubro[$i]->getDescripcion(); ?></option>	
+
+										<?php }else{ ?>
+										<option selected="" value="0">...</option>
+										<?php } ?>
+											
+										<?php foreach ($_SESSION['listaRubro'] as $rubro){ ?>
+
+										<option value="<?php echo $rubro->getId(); ?>"><?php echo $rubro->getDescripcion(); ?></option>
 
 										<?php } ?>
 								</select>

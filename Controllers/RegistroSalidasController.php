@@ -29,6 +29,8 @@ if (isset($_SESSION['usuario'])) {
 			$listaSeleccionArea = $_SESSION['listaSeleccionArea'];
 			$seleccionDestino = $_SESSION['seleccionDestino'];
 			$listaSeleccionDestino = $_SESSION['listaSeleccionDestino'];
+			$seleccionRubro = $_SESSION['seleccionRubro'];
+			$listaSeleccionRubro = $_SESSION['listaSeleccionRubro'];
 			$fechaActual = date('Y-m-d');
 			$hora = date('H:i:s');
 			$usuario = $_SESSION['usuario']->getId();
@@ -50,6 +52,9 @@ if (isset($_SESSION['usuario'])) {
 					$listaOk = false;
 				}
 				if ($listaSeleccionDestino[$i] == 0) {
+					$listaOk = false;
+				}
+				if ($listaSeleccionRubro[$i] == 0) {
 					$listaOk = false;
 				}
 
@@ -168,8 +173,11 @@ if (isset($_SESSION['usuario'])) {
 					$manzana = $seleccionManzana[$i]->getId();
 					$area = $seleccionArea[$i]->getId();
 					$destino = $seleccionDestino[$i]->getId();
+					$rubro = $seleccionRubro[$i]->getId();
+
+
 					
-					$materialRegistroSalidas = new MaterialRegistroSalidas(null,$idMaterial,$idUltimaSalida,$cantidad,$casa,$manzana,$destino,$area);
+					$materialRegistroSalidas = new MaterialRegistroSalidas(null,$idMaterial,$idUltimaSalida,$cantidad,$casa,$manzana,$destino,$area,$rubro);
 					MaterialRegistroSalidas::save($materialRegistroSalidas);
 
 					$i = $i + 1;
@@ -198,6 +206,8 @@ if (isset($_SESSION['usuario'])) {
 				unset($_SESSION['seleccionArea']);
 				unset($_SESSION['listaSeleccionDestino']);
 				unset($_SESSION['seleccionDestino']);
+				unset($_SESSION['listaSeleccionRubro']);
+				unset($_SESSION['seleccionRubro']);
 
 
 				
@@ -266,6 +276,10 @@ if (isset($_SESSION['usuario'])) {
 		//Busqueda y carga de los destino
 		$listaDestino = Destino::all();
 		$_SESSION['listaDestino'] = $listaDestino;
+				
+		//Busqueda y carga de los destino
+		$listaRubro = Rubro::all();
+		$_SESSION['listaRubro'] = $listaRubro;
 
 		$listaProyecto = Proyecto::all();
 		$_SESSION['listaProyecto'] = $listaProyecto;
@@ -373,6 +387,24 @@ if (isset($_SESSION['usuario'])) {
 					}
 
 					$_SESSION['seleccionDestino'] = $seleccionDestino;
+
+					//RUBRO------------------------------------------------------
+
+					$_SESSION['listaSeleccionRubro'] = $_REQUEST['listaSeleccionRubro'];
+
+					$seleccionRubro = [];
+
+					foreach ($_SESSION['listaSeleccionRubro'] as $lista) {
+						if ($lista != 0) {
+							$rubro = Rubro::searchById($lista);
+							array_push ( $seleccionRubro , $rubro );
+						}else{
+							$vacio = null;
+							array_push ( $seleccionRubro , $vacio );
+						}	
+					}
+
+					$_SESSION['seleccionRubro'] = $seleccionRubro;
 
 			
 			$this->save();
@@ -502,6 +534,23 @@ if (isset($_SESSION['usuario'])) {
 
 					$_SESSION['seleccionDestino'] = $seleccionDestino;
 
+					//RUBRO------------------------------------------------------
+
+					$_SESSION['listaSeleccionRubro'] = $_REQUEST['listaSeleccionRubro'];
+
+					$seleccionRubro = [];
+
+					foreach ($_SESSION['listaSeleccionRubro'] as $lista) {
+						if ($lista != 0) {
+							$rubro = Rubro::searchById($lista);
+							array_push ( $seleccionRubro , $rubro );
+						}else{
+							$vacio = null;
+							array_push ( $seleccionRubro , $vacio );
+						}	
+					}
+
+					$_SESSION['seleccionRubro'] = $seleccionRubro;
 	
 
 				}else{
@@ -525,6 +574,7 @@ if (isset($_SESSION['usuario'])) {
 		$seleccionManzana = $_SESSION['seleccionManzana'];
 		$seleccionArea = $_SESSION['seleccionArea'];
 		$seleccionDestino = $_SESSION['seleccionDestino'];
+		$seleccionRubro = $_SESSION['seleccionRubro'];
 
 		unset($listaMaterialSalida[$i]);
 		unset($listaCantidadSalida[$i]);
@@ -532,6 +582,7 @@ if (isset($_SESSION['usuario'])) {
 		unset($seleccionManzana[$i]);
 		unset($seleccionArea[$i]);
 		unset($seleccionDestino[$i]);
+		unset($seleccionRubro[$i]);
 
 		try {
 			$_SESSION['listaMaterialSalida'] = array_values($listaMaterialSalida);
@@ -540,6 +591,7 @@ if (isset($_SESSION['usuario'])) {
 			$_SESSION['seleccionManzana'] = array_values($seleccionManzana);
 			$_SESSION['seleccionArea'] = array_values($seleccionArea);
 			$_SESSION['seleccionDestino'] = array_values($seleccionDestino);
+			$_SESSION['seleccionRubro'] = array_values($seleccionRubro);
 		}catch (Error $e) {
 
 		}

@@ -8,14 +8,16 @@ class MaterialRegistroEntradas
 	private $MaterialId;
 	private $RegistroEntradasId;
 	private $Cantidad;
+	private $Destino;
 
 	
-	function __construct($Id, $MaterialId, $RegistroEntradasId, $Cantidad)
+	function __construct($Id, $MaterialId, $RegistroEntradasId, $Cantidad, $Destino)
 	{
 		$this->setID($Id);
 		$this->setMaterialId($MaterialId);
 		$this->setRegistroEntradasId($RegistroEntradasId);
 		$this->setCantidad($Cantidad);	
+		$this->setDestino($Destino);
 	}
 
 	public function getId(){
@@ -50,16 +52,25 @@ class MaterialRegistroEntradas
 		$this->Cantidad = $Cantidad;
 	}
 
+	public function getDestino(){
+		return $this->Destino;
+	}
+
+	public function setDestino($Destino){
+		$this->Destino = $Destino;
+	}
+
 
 
 	public static function save($materialRegistroEntradas){
 		$db=Db::getConnect();
 		
-		$insert=$db->prepare('INSERT INTO material_registro_entradas VALUES (null,:materialId,:registroEntradasId,:Cantidad)');
+		$insert=$db->prepare('INSERT INTO material_registro_entradas VALUES (null,:materialId,:registroEntradasId,:Cantidad,:Destino)');
 
 		$insert->bindValue('materialId',$materialRegistroEntradas->getMaterialId());
 		$insert->bindValue('registroEntradasId',$materialRegistroEntradas->getRegistroEntradasId());
 		$insert->bindValue('Cantidad',$materialRegistroEntradas->getCantidad());
+		$insert->bindValue('Destino',$materialRegistroEntradas->getDestino());
 		$insert->execute();
 
 		return $insert;
@@ -75,7 +86,7 @@ class MaterialRegistroEntradas
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad']);
+			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad'],$entrada['Destino']);
 
 		}
 		

@@ -35,12 +35,16 @@
 					<th>Descripcion</th>
 					<th>Unidad</th>
 					<th>Cantidad</th>
+					<th>Destino</th>
 					<th>Acciones</th>
 					
 				<tbody>
 					<?php if (isset($_SESSION['listaCantidad'])) {
 
 								$listaCantidad = $_SESSION['listaCantidad'];
+
+								$listaSeleccionDestino = $_SESSION['listaSeleccionDestinoEntrada'];
+								$seleccionDestino = $_SESSION['seleccionDestinoEntrada'];
 
 							} 
 
@@ -62,6 +66,25 @@
 									<input type="number" class="form-control" name="listaCantidad[<?php echo $i ?>]" type="text" value="<?php echo  $listaCantidad[$i]?>" placeholder="cantidad">
 								</div>
 							</td>
+
+							<td>	
+								<select style="width : 100px" name="listaSeleccionDestinoEntrada[<?php echo $i ?>]" class="form-control">
+										<?php if ($seleccionDestino[$i] != null) { ?>
+
+										<option selected="" value="<?php echo $seleccionDestino[$i]->getId(); ?>"><?php echo $seleccionDestino[$i]->getDescripcion(); ?></option>	
+
+										<?php }else{ ?>
+										<option selected="" value="0">...</option>
+										<?php } ?>
+											
+										<?php foreach ($_SESSION['listaDestinoEntrada'] as $destino){ ?>
+
+										<option value="<?php echo $destino->getId(); ?>"><?php echo $destino->getDescripcion(); ?></option>
+
+										<?php } ?>
+								</select>
+							</td>
+                            <td></td>
 							<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=RegistroEntradas&&action=quitarMaterial&&id=<?php echo $i ?>"><span class="glyphicon glyphicon-erase"> </span> Borrar</a></td>
 						</tr>
 						<?php $i = $i + 1; ?>

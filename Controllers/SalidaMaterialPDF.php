@@ -11,6 +11,7 @@ require_once('../Model/Manzana.php');
 require_once('../Model/Casa.php');
 require_once('../Model/Area.php');
 require_once('../Model/Destino.php');
+require_once('../Model/Rubro.php');
 require_once('../Model/RegistroSalidas.php');
 require_once('../Model/MaterialRegistroSalidas.php');
 require_once('../connection.php');
@@ -31,7 +32,7 @@ function Header()
     $registroSalidas = RegistroSalidas::searchSalida($_SESSION['idSalida']);
     $proyecto = Proyecto::searchById($registroSalidas->getProyecto());
     // Logo
-    $this->Image('../fpdf/tutorial/logo.png',12,12,50);
+    $this->Image(__DIR__ . '/../fpdf/tutorial/logoInf.png',12,12,50);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
@@ -51,6 +52,7 @@ function Header()
     $this->Cell(30, 10, 'Unidad', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Cantidad', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Destino', 0, 0, 'C', 0);
+    $this->Cell(30, 10, 'Actividad', 0, 0, 'C', 0);
     $this->Cell(20, 10, 'Casa', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Manzana', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Etapa', 0, 1, 'C', 0);
@@ -97,12 +99,14 @@ foreach ($MaterialRegistroSalidas as $salidas){
     $casa = Casa::searchById($salidas->getCasaId());
     $area = Area::searchById($salidas->getAreaId());
     $destino = Destino::searchById($salidas->getDestinoId());
+    $rubro = Rubro::searchById($salidas->getRubroId());
 
     $pdf->Cell(30, 6, $material->getCodigo(), 0, 0, 'C', 0);
     $pdf->Cell(60, 6, $material->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $material->getUnidad(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $salidas->getCantidad(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $destino->getDescripcion(), 0, 0, 'C', 0);
+    $pdf->Cell(30, 6, $rubro->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(20, 6, $casa->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $manzana->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $area->getDescripcion(), 0, 1, 'C', 0);

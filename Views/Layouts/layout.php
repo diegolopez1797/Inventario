@@ -6,6 +6,7 @@ require_once('Model/MaterialRegistroEntradas.php');
 require_once('Model/Material.php');
 require_once('Model/Contratista.php');
 require_once('Model/Casa.php');
+require_once('Model/Rubro.php');
 require_once('Model/Manzana.php');
 require_once('Model/Area.php');
 require_once('Model/Destino.php');
@@ -33,7 +34,7 @@ require('PHPMailer/SMTP.php');
 
 
 
-error_reporting(0);
+//error_reporting(0);
 session_start();
 ?>
 

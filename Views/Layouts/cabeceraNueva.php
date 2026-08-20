@@ -45,6 +45,7 @@
                 <li><a href="?controller=Material&action=show">Gestion Material</a></li>
                 <li><a href="#">Gestion Destino</a>
                     <ul>
+                        <li><a href="?controller=Rubro&action=show">Actividad</a></li>
                         <li><a href="?controller=Destino&action=show">Destino</a></li>
                         <li><a href="?controller=Casa&action=show">Casa</a></li>
                         <li><a href="?controller=Manzana&action=show">Manzana</a></li>

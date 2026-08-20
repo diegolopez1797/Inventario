@@ -14,7 +14,7 @@ function Header()
 {
 
     // Logo
-    $this->Image('../fpdf/tutorial/logo.png',12,12,50);
+    $this->Image(__DIR__ . '/../fpdf/tutorial/logoInf.png',12,12,50);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
@@ -36,16 +36,33 @@ function Header()
 // Pie de página
 function Footer()
 {
-    // Posición: a 1,5 cm del final
-    $this->SetY(250);
-    // Arial italic 8
+    // 20 mm antes del final de la página
+    $this->SetY(-20);
+
     $this->SetFont('Arial','I',10);
-    // Número de página
+
     $linea = "___________________________________";
-    $this->Cell(100,10, $linea, 0, 1, 'C', 0);
-    $this->Cell(100,0, 'Genera: '.$_SESSION['usuario']->getNombre().' '.$_SESSION['usuario']->getApellido().'', 0, 1, 'C', 0);
-    //$this->SetFont('Arial','I',10);
-    $this->Cell(0,15,'Pagina '.$this->PageNo().' de {nb}',0,0,'C');
+    $this->Cell(100,5,$linea,0,1,'C');
+
+    $this->Cell(
+        100,
+        5,
+        'Genera: '.$_SESSION['usuario']->getNombre().' '.$_SESSION['usuario']->getApellido(),
+        0,
+        1,
+        'C'
+    );
+
+    $this->Ln(2);
+
+    $this->Cell(
+        0,
+        5,
+        'Página '.$this->PageNo().' de {nb}',
+        0,
+        0,
+        'C'
+    );
 }
 }
 
@@ -55,6 +72,7 @@ $informeGeneral = $_SESSION['informeGeneral'];
    
 $pdf = new InformeGeneralPDF();
 $pdf->SetMargins(10,10,10);
+$pdf->SetAutoPageBreak(true, 35); // Reserva 35 mm para el pie de página
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times','',12);

@@ -63,7 +63,7 @@ class InformeMaterialEntrada
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad']);
+			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad'],$entrada['MaterialID']);
 
 		}
 		

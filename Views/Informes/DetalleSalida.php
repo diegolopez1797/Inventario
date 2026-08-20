@@ -27,12 +27,14 @@
 					<th>Manzana</th>
 					<th>Casa</th>
 					<th>Destino</th>
+					<th>Actividad</th>
 				</tr>
 				<tbody>
 					<?php $i = 0?>
 					<?php foreach ($materialRegistroSalidas as $salida) {
 
 						$destino = Destino::searchById($salida->getDestinoId());
+						$rubro = Rubro::searchById($salida->getRubroId());
 						$casa = Casa::searchById($salida->getCasaId());
 						$manzana = Manzana::searchById($salida->getManzanaId());
 						$area = Area::searchById($salida->getAreaId());
@@ -49,6 +51,7 @@
 						<td><?php echo $manzana->getDescripcion(); ?></td>
 						<td><?php echo $casa->getDescripcion(); ?></td>
 						<td><?php echo $destino->getDescripcion(); ?></td>
+						<td><?php echo $rubro->getDescripcion(); ?></td>
 						
 					</tr>
 					<?php $i=$i+1; ?>

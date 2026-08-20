@@ -1,7 +1,6 @@
 <?php
 ob_start();
 
-require('../fpdf/fpdf.php');
 require_once('../Model/Material.php');
 require_once('../Model/Usuario.php');
 require_once('../Model/Contratista.php');
@@ -13,6 +12,8 @@ require_once('../Model/Manzana.php');
 require_once('../Model/Casa.php');
 require_once('../Model/Area.php');
 require_once('../Model/Destino.php');
+require_once('../Model/Rubro.php');
+require_once(__DIR__ . '/../fpdf/FPDF_Alpha.php');
 
 session_start();
 
@@ -22,18 +23,29 @@ $registroSalidas = RegistroSalidas::searchSalida($_SESSION['idSalida']);
 
 $materialRegistroSalidas = MaterialRegistroSalidas::searchMaterialRegistroSalidas($registroSalidas->getId());
 
-class SalidaMaterialPDF extends FPDF
+class SalidaMaterialPDF extends FPDF_Alpha
 {
 // Cabecera de página
 function Header()
 {
+    // Marca de agua
+    // Aplica 20% de opacidad
+    $this->SetAlpha(0.2);
+
+    $this->Image(
+        __DIR__ . '/../fpdf/tutorial/marca_agua.png',
+        55, 25, 180, 0, 'PNG'
+    );
+
+    // Vuelve a opacidad normal para que no afecte el resto del contenido
+    $this->SetAlpha(1);
 
     $registroSalidas = RegistroSalidas::searchSalida($_SESSION['idSalida']);
     $usuario = Usuario::searchByCodigoUser($registroSalidas->getUsuario());
     $contratista = Contratista::searchById($registroSalidas->getContratista());
     $proyecto = Proyecto::searchById($registroSalidas->getProyecto());
     // Logo
-    $this->Image('../fpdf/tutorial/logo.png',12,12,50);
+    $this->Image(__DIR__ . '/../fpdf/tutorial/logoInf.png',12,12,50);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
@@ -53,11 +65,12 @@ function Header()
     $this->Cell(30, 10, 'Codigo', 0, 0, 'C', 0);
     $this->Cell(60, 10, 'Descripcion', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Unidad', 0, 0, 'C', 0);
-    $this->Cell(25, 10, 'Cantidad', 0, 0, 'C', 0);
-    $this->Cell(25, 10, 'Etapa', 0, 0, 'C', 0);
+    $this->Cell(20, 10, 'Cantidad', 0, 0, 'C', 0);
+    $this->Cell(20, 10, 'Etapa', 0, 0, 'C', 0);
     $this->Cell(20, 10, 'Manzana', 0, 0, 'C', 0);
     $this->Cell(20, 10, 'Casa', 0, 0, 'C', 0);
-    $this->Cell(50, 10, 'Destino', 0, 1, 'C', 0);
+    $this->Cell(30, 10, 'Destino', 0, 0, 'C', 0);
+    $this->Cell(30, 10, 'Actividad', 0, 1, 'C', 0);
 }
 
 // Pie de página
@@ -79,9 +92,6 @@ function Footer()
 }
 
 
-
-
-    
 $pdf = new SalidaMaterialPDF('L');
 $pdf->SetMargins(10,10,10);
 $pdf->AliasNbPages();
@@ -96,15 +106,17 @@ foreach ($materialRegistroSalidas as $salidas){
     $casa = Casa::searchById($salidas->getCasaId());
     $area = Area::searchById($salidas->getAreaId());
     $destino = Destino::searchById($salidas->getDestinoId());
+    $rubro = Rubro::searchById($salidas->getRubroId());
 
     $pdf->Cell(30, 6, $material->getCodigo(), 0, 0, 'C', 0);
     $pdf->Cell(60, 6, $material->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $material->getUnidad(), 0, 0, 'C', 0);
-    $pdf->Cell(25, 6, $salidas->getCantidad(), 0, 0, 'C', 0);
-    $pdf->Cell(25, 6, $area->getDescripcion(), 0, 0, 'C', 0);
+    $pdf->Cell(20, 6, $salidas->getCantidad(), 0, 0, 'C', 0);
+    $pdf->Cell(20, 6, $area->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(20, 6, $manzana->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(20, 6, $casa->getDescripcion(), 0, 0, 'C', 0);
-    $pdf->Cell(50, 6, $destino->getDescripcion(), 0, 1, 'C', 0);
+    $pdf->Cell(30, 6, $destino->getDescripcion(), 0, 0, 'C', 0);
+    $pdf->Cell(30, 6, $rubro->getDescripcion(), 0, 1, 'C', 0);
 
 }
 ob_end_clean();
