@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-08-2026 a las 20:24:03
+-- Tiempo de generación: 20-08-2026 a las 18:45:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -102,7 +102,8 @@ CREATE TABLE `material_registro_entradas` (
   `ID` int(10) NOT NULL,
   `MaterialID` int(10) NOT NULL,
   `Registro_EntradasID` int(10) NOT NULL,
-  `Cantidad` int(10) DEFAULT NULL
+  `Cantidad` int(10) DEFAULT NULL,
+  `DestinoID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -119,7 +120,8 @@ CREATE TABLE `material_registro_salidas` (
   `CasaID` int(10) NOT NULL,
   `ManzanaID` int(10) NOT NULL,
   `DestinoID` int(10) NOT NULL,
-  `AreaID` int(10) NOT NULL
+  `AreaID` int(10) NOT NULL,
+  `RubroID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -170,6 +172,17 @@ CREATE TABLE `registro_salidas` (
 CREATE TABLE `rol` (
   `ID` int(10) NOT NULL,
   `Descripcion` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rubro`
+--
+
+CREATE TABLE `rubro` (
+  `ID` int(10) NOT NULL,
+  `Descripcion` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -233,7 +246,8 @@ ALTER TABLE `material`
 ALTER TABLE `material_registro_entradas`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `FKMaterial_R356246` (`MaterialID`),
-  ADD KEY `FKMaterial_R660572` (`Registro_EntradasID`);
+  ADD KEY `FKMaterial_R660572` (`Registro_EntradasID`),
+  ADD KEY `DestinoID` (`DestinoID`);
 
 --
 -- Indices de la tabla `material_registro_salidas`
@@ -245,7 +259,8 @@ ALTER TABLE `material_registro_salidas`
   ADD KEY `FKMaterial_R349492` (`DestinoID`),
   ADD KEY `FKMaterial_R249940` (`AreaID`),
   ADD KEY `FKMaterial_R690450` (`ManzanaID`),
-  ADD KEY `FKMaterial_R269180` (`CasaID`);
+  ADD KEY `FKMaterial_R269180` (`CasaID`),
+  ADD KEY `RubroID` (`RubroID`);
 
 --
 -- Indices de la tabla `proyecto`
@@ -273,6 +288,12 @@ ALTER TABLE `registro_salidas`
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indices de la tabla `rubro`
+--
+ALTER TABLE `rubro`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -359,6 +380,12 @@ ALTER TABLE `rol`
   MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `rubro`
+--
+ALTER TABLE `rubro`
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -373,7 +400,8 @@ ALTER TABLE `usuario`
 --
 ALTER TABLE `material_registro_entradas`
   ADD CONSTRAINT `FKMaterial_R356246` FOREIGN KEY (`MaterialID`) REFERENCES `material` (`ID`),
-  ADD CONSTRAINT `FKMaterial_R660572` FOREIGN KEY (`Registro_EntradasID`) REFERENCES `registro_entradas` (`ID`);
+  ADD CONSTRAINT `FKMaterial_R660572` FOREIGN KEY (`Registro_EntradasID`) REFERENCES `registro_entradas` (`ID`),
+  ADD CONSTRAINT `material_registro_entradas_ibfk_1` FOREIGN KEY (`DestinoID`) REFERENCES `destino` (`ID`);
 
 --
 -- Filtros para la tabla `material_registro_salidas`
@@ -384,7 +412,8 @@ ALTER TABLE `material_registro_salidas`
   ADD CONSTRAINT `FKMaterial_R269180` FOREIGN KEY (`CasaID`) REFERENCES `casa` (`ID`),
   ADD CONSTRAINT `FKMaterial_R349492` FOREIGN KEY (`DestinoID`) REFERENCES `destino` (`ID`),
   ADD CONSTRAINT `FKMaterial_R456168` FOREIGN KEY (`MaterialID`) REFERENCES `material` (`ID`),
-  ADD CONSTRAINT `FKMaterial_R690450` FOREIGN KEY (`ManzanaID`) REFERENCES `manzana` (`ID`);
+  ADD CONSTRAINT `FKMaterial_R690450` FOREIGN KEY (`ManzanaID`) REFERENCES `manzana` (`ID`),
+  ADD CONSTRAINT `material_registro_salidas_ibfk_1` FOREIGN KEY (`RubroID`) REFERENCES `rubro` (`ID`);
 
 --
 -- Filtros para la tabla `registro_entradas`
