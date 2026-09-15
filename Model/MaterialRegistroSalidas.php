@@ -13,19 +13,23 @@ class MaterialRegistroSalidas
 	private $destinoId;
 	private $areaId;
 	private $rubroId;
+	private $ubicacionId;
+	private $costoUnitario;
 
-	
-	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId, $rubroId)
+
+	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId, $rubroId, $ubicacionId = null, $costoUnitario = null)
 	{
 		$this->setID($Id);
 		$this->setMaterialId($MaterialId);
 		$this->setRegistroSalidasId($RegistroSalidasId);
-		$this->setCantidad($Cantidad);	
+		$this->setCantidad($Cantidad);
 		$this->setCasaId($casaId);
 		$this->setManzanaId($manzanaId);
 		$this->setDestinoId($destinoId);
 		$this->setAreaId($areaId);
 		$this->setRubroId($rubroId);
+		$this->setUbicacionId($ubicacionId);
+		$this->setCostoUnitario($costoUnitario);
 	}
 
 	public function getId(){
@@ -99,19 +103,37 @@ class MaterialRegistroSalidas
 		$this->rubroId = $rubroId;
 	}
 
+	public function getUbicacionId(){
+		return $this->ubicacionId;
+	}
+
+	public function setUbicacionId($ubicacionId){
+		$this->ubicacionId = $ubicacionId;
+	}
+
+	public function getCostoUnitario(){
+		return $this->costoUnitario;
+	}
+
+	public function setCostoUnitario($costoUnitario){
+		$this->costoUnitario = $costoUnitario;
+	}
+
 	public static function save($materialRegistroSalidas){
 		$db=Db::getConnect();
-		
-		$insert=$db->prepare('INSERT INTO material_registro_salidas VALUES (null,:materialId,:registroSalidasId,:Cantidad,:Casa,:Manzana,:Destino,:Area,:Rubro)');
+
+		$insert=$db->prepare('INSERT INTO material_registro_salidas VALUES (null,:materialId,:registroSalidasId,:Cantidad,:Casa,:Manzana,:Destino,:Area,:Rubro,:Ubicacion,:Costo)');
 
 		$insert->bindValue('materialId',$materialRegistroSalidas->getMaterialId());
 		$insert->bindValue('registroSalidasId',$materialRegistroSalidas->getRegistroSalidasId());
 		$insert->bindValue('Cantidad',$materialRegistroSalidas->getCantidad());
-		$insert->bindValue('Casa',$materialRegistroSalidas->getCasaId());
-		$insert->bindValue('Manzana',$materialRegistroSalidas->getManzanaId());
-		$insert->bindValue('Destino',$materialRegistroSalidas->getDestinoId());
-		$insert->bindValue('Area',$materialRegistroSalidas->getAreaId());
-		$insert->bindValue('Rubro',$materialRegistroSalidas->getRubroId());
+		$insert->bindValue('Casa',$materialRegistroSalidas->getCasaId(), $materialRegistroSalidas->getCasaId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Manzana',$materialRegistroSalidas->getManzanaId(), $materialRegistroSalidas->getManzanaId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Destino',$materialRegistroSalidas->getDestinoId(), $materialRegistroSalidas->getDestinoId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Area',$materialRegistroSalidas->getAreaId(), $materialRegistroSalidas->getAreaId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Rubro',$materialRegistroSalidas->getRubroId(), $materialRegistroSalidas->getRubroId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Ubicacion',$materialRegistroSalidas->getUbicacionId(), $materialRegistroSalidas->getUbicacionId() === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+		$insert->bindValue('Costo',$materialRegistroSalidas->getCostoUnitario(), $materialRegistroSalidas->getCostoUnitario() === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
 		$insert->execute();
 
 		return $insert;
@@ -127,10 +149,10 @@ class MaterialRegistroSalidas
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID']);
+			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID'],$entrada['UbicacionID'],$entrada['CostoUnitario']);
 
 		}
-		
+
 		return $materialRegistroEntradas;
 
 	}

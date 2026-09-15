@@ -1,164 +1,109 @@
-<?php 
+<?php
 /**
-* 
+* Salidas por Ubicación (Fase 2.1 seccion 6-7 #3 / Fase 3 seccion 8). Reemplaza "Por material y
+* proyecto" y "Por casa" - los metodos basados en Casa/Manzana (searchByMaterial(),
+* searchByMaterialDetalle(), searchByCasa()) se eliminaron junto con esos 2 informes: nada mas
+* los llamaba. Ya no se instancian objetos InformeDetallado - ambos metodos devuelven arreglos
+* asociativos directamente, consumidos por InformeDetalladoController/las Views del informe nuevo.
 */
 class InformeDetallado
 {
-	private $Id;
-	private $MaterialId;
-	private $RegistroSalidasId;
-	private $Cantidad;
-	private $casaId;
-	private $manzanaId;
-	private $destinoId;
-	private $areaId;
-	private $proyectoId;
-
-	
-	function __construct($Id, $MaterialId, $RegistroSalidasId, $Cantidad, $casaId, $manzanaId, $destinoId, $areaId, $proyectoId)
-	{
-		$this->setID($Id);
-		$this->setMaterialId($MaterialId);
-		$this->setRegistroSalidasId($RegistroSalidasId);
-		$this->setCantidad($Cantidad);	
-		$this->setCasaId($casaId);
-		$this->setManzanaId($manzanaId);
-		$this->setDestinoId($destinoId);
-		$this->setAreaId($areaId);
-		$this->setProyectoId($proyectoId);
-	}
-
-	public function getId(){
-		return $this->Id;
-	}
-
-	public function setId($Id){
-		$this->Id = $Id;
-	}
-
-	public function getMaterialId(){
-		return $this->MaterialId;
-	}
-
-	public function setMaterialId($MaterialId){
-		$this->MaterialId = $MaterialId;
-	}
-
-	public function getRegistroSalidasId(){
-		return $this->RegistroSalidasId;
-	}
-
-	public function setRegistroSalidasId($RegistroSalidasId){
-		$this->RegistroSalidasId = $RegistroSalidasId;
-	}
-
-	public function getCantidad(){
-		return $this->Cantidad;
-	}
-
-	public function setCantidad($Cantidad){
-		$this->Cantidad = $Cantidad;
-	}
-
-	public function getCasaId(){
-		return $this->casaId;
-	}
-
-	public function setCasaId($casaId){
-		$this->casaId = $casaId;
-	}
-	public function getManzanaId(){
-		return $this->manzanaId;
-	}
-
-	public function setManzanaId($manzanaId){
-		$this->manzanaId = $manzanaId;
-	}
-
-	public function getDestinoId(){
-		return $this->destinoId;
-	}
-
-	public function setDestinoId($destinoId){
-		$this->destinoId = $destinoId;
-	}
-	
-	public function getAreaId(){
-		return $this->areaId;
-	}
-
-	public function setAreaId($areaId){
-		$this->areaId = $areaId;
-	}
-
-	public function getProyectoId(){
-		return $this->proyectoId;
-	}
-
-	public function setProyectoId($proyectoId){
-		$this->proyectoId = $proyectoId;
-	}
-
-
-	//------------------------------------------------------------------------------------
-
-	public static function searchByMaterial($idMaterial, $idProyecto){
+	// Reemplaza el recorrido Manzana::all() x Casa::all() por un GROUP BY real sobre
+	// UbicacionID - el concepto generico que reemplaza a Casa/Manzana/Torre/Etapa en toda la
+	// logica de este informe. Casa/Manzana/Area siguen existiendo solo como dato historico
+	// visible en otras pantallas, nunca aqui.
+	public static function porUbicacion($proyectoId, $filtros = []){
 		$db = Db::getConnect();
 
-				$InformeDetallado = [];
+		$where = ['rs.ProyectoID = :proyectoId'];
+		$params = ['proyectoId' => $proyectoId];
 
-				$select = $db->prepare('SELECT material_registro_salidas.ID, material_registro_salidas.MaterialID, material_registro_salidas.Registro_SalidasID, material_registro_salidas.Cantidad, material_registro_salidas.CasaID, material_registro_salidas.ManzanaID, material_registro_salidas.DestinoID, material_registro_salidas.AreaID, registro_salidas.ProyectoID FROM material_registro_salidas INNER JOIN registro_salidas ON material_registro_salidas.Registro_SalidasID = registro_salidas.ID AND registro_salidas.ProyectoID=:ProyectoID AND material_registro_salidas.MaterialID=:MaterialID');
-				$select->bindValue('ProyectoID',$idProyecto);
-				$select->bindValue('MaterialID',$idMaterial);
-				$select->execute();
+		if (!empty($filtros['ubicacionId'])) {
+			$where[] = 'mrs.UbicacionID = :ubicacionId';
+			$params['ubicacionId'] = $filtros['ubicacionId'];
+		}
+		if (!empty($filtros['materialId'])) {
+			$where[] = 'mrs.MaterialID = :materialId';
+			$params['materialId'] = $filtros['materialId'];
+		}
+		if (!empty($filtros['rubroId'])) {
+			$where[] = 'mrs.RubroID = :rubroId';
+			$params['rubroId'] = $filtros['rubroId'];
+		}
+		if (!empty($filtros['fechaInicial'])) {
+			$where[] = 'rs.Fecha >= :fechaInicial';
+			$params['fechaInicial'] = $filtros['fechaInicial'];
+		}
+		if (!empty($filtros['fechaFinal'])) {
+			$where[] = 'rs.Fecha <= :fechaFinal';
+			$params['fechaFinal'] = $filtros['fechaFinal'];
+		}
 
-				foreach($select->fetchAll() as $entrada){
-					$InformeDetallado[] = new InformeDetallado($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['ProyectoID']);
+		$sql = "
+			SELECT mrs.UbicacionID, mrs.MaterialID,
+			       m.Codigo AS MaterialCodigo, m.Descripcion AS MaterialDescripcion, m.Unidad AS MaterialUnidad,
+			       SUM(mrs.Cantidad) AS CantidadTotal,
+			       COUNT(DISTINCT mrs.Registro_SalidasID) AS TotalDocumentos
+			FROM material_registro_salidas mrs
+			INNER JOIN registro_salidas rs ON mrs.Registro_SalidasID = rs.ID
+			INNER JOIN material m ON m.ID = mrs.MaterialID
+			WHERE " . implode(' AND ', $where) . "
+			GROUP BY mrs.UbicacionID, mrs.MaterialID
+		";
 
-				}
-		
-		return $InformeDetallado;
+		$select = $db->prepare($sql);
+		foreach ($params as $nombre => $valor) {
+			$select->bindValue($nombre, $valor);
+		}
+		$select->execute();
+
+		return $select->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	//------------------------------------------------------------------------------------
-
-	public static function searchByMaterialDetalle($idProyecto, $idManzana, $idCasa, $idMaterial){
+	// Lineas individuales detras de un grupo (Ubicacion, Material) de porUbicacion() - el
+	// drill-down de "ver el detalle" de una fila agrupada. $ubicacionId puede ser null (grupo
+	// "Sin ubicación registrada").
+	public static function lineasPorUbicacionMaterial($proyectoId, $ubicacionId, $materialId, $filtros = []){
 		$db = Db::getConnect();
 
-				$InformeMaterialDetallado = [];
+		$where = ['rs.ProyectoID = :proyectoId', 'mrs.MaterialID = :materialId'];
+		$params = ['proyectoId' => $proyectoId, 'materialId' => $materialId];
 
-				$select = $db->prepare('SELECT material_registro_salidas.ID, material_registro_salidas.MaterialID, material_registro_salidas.Registro_SalidasID, material_registro_salidas.Cantidad, material_registro_salidas.CasaID, material_registro_salidas.ManzanaID, material_registro_salidas.DestinoID, material_registro_salidas.AreaID, registro_salidas.ProyectoID FROM material_registro_salidas INNER JOIN registro_salidas ON material_registro_salidas.Registro_SalidasID = registro_salidas.ID AND registro_salidas.ProyectoID=:ProyectoID AND material_registro_salidas.ManzanaID=:ManzanaID AND material_registro_salidas.CasaID=:CasaID AND material_registro_salidas.MaterialID=:MaterialID');
-				$select->bindValue('ProyectoID',$idProyecto);
-				$select->bindValue('ManzanaID',$idManzana);
-				$select->bindValue('CasaID',$idCasa);
-				$select->bindValue('MaterialID',$idMaterial);
-				$select->execute();
+		if ($ubicacionId !== null) {
+			$where[] = 'mrs.UbicacionID = :ubicacionId';
+			$params['ubicacionId'] = $ubicacionId;
+		} else {
+			$where[] = 'mrs.UbicacionID IS NULL';
+		}
+		if (!empty($filtros['fechaInicial'])) {
+			$where[] = 'rs.Fecha >= :fechaInicial';
+			$params['fechaInicial'] = $filtros['fechaInicial'];
+		}
+		if (!empty($filtros['fechaFinal'])) {
+			$where[] = 'rs.Fecha <= :fechaFinal';
+			$params['fechaFinal'] = $filtros['fechaFinal'];
+		}
+		if (!empty($filtros['rubroId'])) {
+			$where[] = 'mrs.RubroID = :rubroId';
+			$params['rubroId'] = $filtros['rubroId'];
+		}
 
-				foreach($select->fetchAll() as $entrada){
-					$InformeMaterialDetallado[] = new InformeDetallado($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['ProyectoID']);
+		$sql = "
+			SELECT rs.ID AS DocumentoID, rs.Fecha, rs.Hora, rs.UsuarioID, rs.ContratistaID,
+			       mrs.Cantidad, mrs.DestinoID, mrs.RubroID
+			FROM material_registro_salidas mrs
+			INNER JOIN registro_salidas rs ON mrs.Registro_SalidasID = rs.ID
+			WHERE " . implode(' AND ', $where) . "
+			ORDER BY rs.Fecha DESC, rs.Hora DESC
+		";
 
-				}
-		
-		return $InformeMaterialDetallado;
-	}
+		$select = $db->prepare($sql);
+		foreach ($params as $nombre => $valor) {
+			$select->bindValue($nombre, $valor);
+		}
+		$select->execute();
 
-	public static function searchByCasa($idProyecto, $idManzana, $idCasa){
-		$db = Db::getConnect();
-
-				$InformeDetallado = [];
-
-				$select = $db->prepare('SELECT material_registro_salidas.ID, material_registro_salidas.MaterialID, material_registro_salidas.Registro_SalidasID, material_registro_salidas.Cantidad, material_registro_salidas.CasaID, material_registro_salidas.ManzanaID, material_registro_salidas.DestinoID, material_registro_salidas.AreaID, registro_salidas.ProyectoID FROM material_registro_salidas INNER JOIN registro_salidas ON material_registro_salidas.Registro_SalidasID = registro_salidas.ID AND registro_salidas.ProyectoID=:ProyectoID AND material_registro_salidas.ManzanaID=:ManzanaID AND material_registro_salidas.CasaID=:CasaID');
-				$select->bindValue('ProyectoID',$idProyecto);
-				$select->bindValue('ManzanaID',$idManzana);
-				$select->bindValue('CasaID',$idCasa);
-				$select->execute();
-
-				foreach($select->fetchAll() as $entrada){
-					$InformeDetallado[] = new InformeDetallado($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['ProyectoID']);
-
-				}
-		
-		return $InformeDetallado;
+		return $select->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 

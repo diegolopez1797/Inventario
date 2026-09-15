@@ -1,17 +1,18 @@
 <div class="container">
 	<h2>Editar Material</h2>
 	<form action="?controller=Material&&action=update" method="POST">
+	<?php echo Csrf::field(); ?>
 		<input type="hidden" name="id" id="id" value="<?php echo $material->getId(); ?>" >
 		<input type="hidden" name="codigo" id="codigo" value="<?php echo $material->getCodigo(); ?>" >
 
 		<div class="form-group">
 			<label for="text">Descripcion</label>
-			<input type="text" name="descripcion" id="descripcion" class="form-control" value="<?php echo $material->getDescripcion(); ?>" required>
+			<input type="text" name="descripcion" id="descripcion" class="form-control" value="<?php echo h($material->getDescripcion()); ?>" required>
 		</div>
 
 		<div class="form-group">
 			<label for="text">Unidad</label>
-			<input type="text" name="unidad" id="unidad" class="form-control" value="<?php echo $material->getUnidad(); ?>" required>
+			<input type="text" name="unidad" id="unidad" class="form-control" value="<?php echo h($material->getUnidad()); ?>" required>
 		</div>
 
 		<div class="form-group">

@@ -1,6 +1,7 @@
 <div class="container">
   <h2>Crear Material</h2>
   <form action="?controller=Material&&action=save" method="POST">
+  <?php echo Csrf::field(); ?>
 
     <div class="form-group">
       <label for="text">Ingrese los datos del material:</label>

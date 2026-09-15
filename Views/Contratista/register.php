@@ -1,6 +1,7 @@
 <div class="container">
   <h2>Crear Contratista</h2>
   <form action="?controller=Contratista&&action=save" method="POST">
+  <?php echo Csrf::field(); ?>
 
     <div class="form-group">
       <label for="text"></label>

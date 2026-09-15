@@ -6,27 +6,23 @@ if (isset($_SESSION['usuario'])) {
 
 	class InformeEntradaController
 {
-	
+
 	function __construct()
 	{
-		
+
 	}
 
-	function show(){
-
-
-		if (!empty($_SESSION['informeEntradaParcial'])) {
-			$_SESSION['informeEntradaGeneral'] = $_SESSION['informeEntradaParcial'];
-		}else{
-			$_SESSION['informeEntradaTotal'] = InformeEntrada::all();
-			$_SESSION['informeEntradaGeneral'] = $_SESSION['informeEntradaTotal'];
-		}
-		//---------------------------------------------------------------
-
-		require_once('Views/Informes/InformeEntrada.php');
-	}
-
+	// El listado propio de este informe (show/search/eliminar/generarEntradaPDF) se elimino -
+	// Movimientos lo reemplaza. detalle() se conserva porque Movimientos, Kardex, Por Usuario,
+	// Salidas por Ubicacion y el Informe de Solicitudes reutilizan este drill-down para mostrar
+	// el documento completo de una entrada (Fase 3 seccion 4: "reutilizar sin modificar").
 	function detalle(){
+		if (!Permiso::usuarioPuede('catalogo.ver')) {
+			flash('danger', 'No tiene permiso para ver este documento.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		$id = $_GET['id'];
 		$_SESSION['idEntrada'] = $id;
 		$idUsuario = $_GET['usuario'];
@@ -40,49 +36,16 @@ if (isset($_SESSION['usuario'])) {
 		require_once('Views/Informes/DetalleEntrada.php');
 	}
 
+	// Reabre el mismo documento (usa el id guardado por detalle()) despues de generar el PDF -
+	// ya no existe un show() al cual volver, porque el listado propio de este informe se elimino.
 	function generarPDF(){
 		echo "<script>window.open('Controllers/InformeEntradaMaterialPDF.php', '_blank')</script>";
-		unset($_SESSION['informeEntradaParcial']);
-		$this->show();
-	}
-
-	function generarEntradaPDF(){
-		echo "<script>window.open('Controllers/InformeEntradaPDF.php', '_blank')</script>";
-		//unset($_SESSION['informeEntradaParcial']);
-		$this->show();
-	}
-
-
-	function search(){
-		if (!empty($_POST['codigo'])) {
-			$codigo = $_POST['codigo'];
-			$material = InformeEntrada::searchById($codigo);
-			if ($codigo =! $material->getId()) {
-				echo "<script>alert('¡ La entrada buscado NO EXISTE !')</script>";
-			}else{
-
-				if (isset($_SESSION['informeEntradaParcial'])) {
-				$listaMaterial = [];
-				$listaMaterial = $_SESSION['informeEntradaParcial'];
-				}else{
-					$listaMaterial = [];
-				}
-				array_push ( $listaMaterial , $material );
-				$_SESSION['informeEntradaParcial'] = $listaMaterial;
-
-			}
-			
+		if (isset($_SESSION['idEntrada'])) {
+			$registroEntradas = RegistroEntradas::searchEntrada($_SESSION['idEntrada']);
+			echo "<script>window.location.href = '?controller=InformeEntrada&action=detalle&id=" . $_SESSION['idEntrada'] . "&usuario=" . $registroEntradas->getUsuario() . "';</script>";
 		}
-		$this->show();
 	}
 
-	function eliminar(){
-		unset($_SESSION['informeEntradaParcial']);
-		$this->show();
-	}
-
-
-	
 	function error(){
 		require_once('Views/Material/error.php');
 	}

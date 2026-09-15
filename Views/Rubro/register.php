@@ -1,6 +1,7 @@
 <div class="container">
   <h2>Crear Actividad</h2>
   <form action="?controller=Rubro&&action=save" method="POST">
+  <?php echo Csrf::field(); ?>
 
     <div class="form-group">
       <label for="text"></label>

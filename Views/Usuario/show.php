@@ -35,11 +35,11 @@
 					?>
 					<tr>
 						<td><?php echo $usuario->getIdentificacion(); ?></td>
-						<td><?php echo $usuario->getNombre(); ?></td>
-						<td><?php echo $usuario->getApellido(); ?></td>
-						<td><?php echo $rol->getDescripcion(); ?></td>
+						<td><?php echo h($usuario->getNombre()); ?></td>
+						<td><?php echo h($usuario->getApellido()); ?></td>
+						<td><?php echo h($rol->getDescripcion()); ?></td>
 						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Usuario&&action=updateshow&&id=<?php echo $usuario->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Usuario&&action=delete&&id=<?php echo $usuario->getId(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Usuario&&action=delete&&id=<?php echo $usuario->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

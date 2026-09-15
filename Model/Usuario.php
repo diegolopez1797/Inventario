@@ -113,18 +113,17 @@ class Usuario
 	public static function verificarUsuario($Identificacion, $Clave){
 
 		$db=Db::getConnect();
-		$select=$db->prepare('SELECT * FROM usuario WHERE Clave=:Clave and Identificacion=:Identificacion');
+		$select=$db->prepare('SELECT Clave FROM usuario WHERE Identificacion=:Identificacion');
 		$select->bindValue('Identificacion',$Identificacion);
-		$select->bindValue('Clave',$Clave);
 		$select->execute();
 
-		if ($select->rowCount()) {
-			return true;
-		}else{
+		$usuario = $select->fetch();
+
+		if ($usuario === false) {
 			return false;
 		}
 
-		
+		return password_verify($Clave, $usuario['Clave']);
 	}
 
 //----------------------LISTA TODOS LOS USUARIOS EXISTENTES EN SISTEMA---------------------------------

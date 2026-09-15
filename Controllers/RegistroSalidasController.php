@@ -14,13 +14,21 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function save(){
+		if (!Permiso::usuarioPuede('salida.registrar')) {
+			flash('danger', 'No tiene permiso para registrar salidas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		if (isset($_SESSION['listaMaterialSalida'])) {
 			
 			$listaMaterial = $_SESSION['listaMaterialSalida'];
 			$listaCantidad = $_SESSION['listaCantidadSalida'];
-			$seleccionContratista = $_SESSION['seleccionContratista'];
-			$seleccionProyecto = $_SESSION['seleccionProyecto'];
+			$seleccionContratista = isset($_SESSION['seleccionContratista']) ? $_SESSION['seleccionContratista'] : null;
+			// Lectura null-safe: si por algun motivo se llega aqui sin Proyecto (no deberia
+			// pasar, ya que agregar el primer material ya lo exige), evita un Warning de
+			// indice indefinido - el chequeo empty($seleccionProyecto) de abajo ya lo cubre.
+			$seleccionProyecto = isset($_SESSION['seleccionProyecto']) ? $_SESSION['seleccionProyecto'] : null;
 			$seleccionCasa = $_SESSION['seleccionCasa'];
 			$listaSeleccionCasa = $_SESSION['listaSeleccionCasa'];
 			$seleccionManzana = $_SESSION['seleccionManzana'];
@@ -31,9 +39,23 @@ if (isset($_SESSION['usuario'])) {
 			$listaSeleccionDestino = $_SESSION['listaSeleccionDestino'];
 			$seleccionRubro = $_SESSION['seleccionRubro'];
 			$listaSeleccionRubro = $_SESSION['listaSeleccionRubro'];
+			$seleccionUbicacion = isset($_SESSION['seleccionUbicacion']) ? $_SESSION['seleccionUbicacion'] : [];
 			$fechaActual = date('Y-m-d');
 			$hora = date('H:i:s');
 			$usuario = $_SESSION['usuario']->getId();
+
+			// Destino y Rubro/Actividad son obligatorios para cada linea (a diferencia de
+			// Casa/Manzana/Area, que siguen sin usarse). Se valida aqui, en el Controller de
+			// Salida Material especificamente, y no en RegistroSalidas::registrar() (compartido
+			// con la entrega de Solicitudes, donde estos dos campos siguen siendo opcionales por
+			// decision de negocio ya tomada) - asi cada flujo mantiene su propia regla.
+			foreach ($listaMaterial as $i => $material) {
+				if (empty($seleccionDestino[$i]) || empty($seleccionRubro[$i])) {
+					flash_now('warning', 'Debe seleccionar un destino y un rubro/actividad para cada material.');
+					$this->show();
+					return;
+				}
+			}
 
 			$i = 0;
 			$listaOk = true;
@@ -42,22 +64,9 @@ if (isset($_SESSION['usuario'])) {
 				if ($listaCantidad[$i] <= 0) {
 					$listaOk = false;
 				}
-				if ($listaSeleccionCasa[$i] == 0) {
-					$listaOk = false;
-				}
-				if ($listaSeleccionManzana[$i] == 0) {
-					$listaOk = false;
-				}
-				if ($listaSeleccionArea[$i] == 0) {
-					$listaOk = false;
-				}
-				if ($listaSeleccionDestino[$i] == 0) {
-					$listaOk = false;
-				}
-				if ($listaSeleccionRubro[$i] == 0) {
-					$listaOk = false;
-				}
-
+				// Casa/Manzana/Area dejaron de ser obligatorios: Ubicacion es ahora el destino
+				// fisico principal. Su obligatoriedad condicional (solo si el proyecto ya tiene
+				// hojas activas) se valida en RegistroSalidas::registrar(), unica fuente de verdad.
 
 				$i = $i + 1;
 
@@ -73,153 +82,77 @@ if (isset($_SESSION['usuario'])) {
 			
 			if ($listaOk == true) {
 
+				try {
 
-				// verificar si la cantidad en inventario es suficiente
-				$listaCompletaMaterial = Material::all();
-				$objetoTotal = [];
-				$cantidadTotal = [];
+					$resultado = RegistroSalidas::registrar(
+						$fechaActual,
+						$hora,
+						$usuario,
+						$seleccionContratista->getId(),
+						$seleccionProyecto->getId(),
+						$listaMaterial,
+						$listaCantidad,
+						$seleccionCasa,
+						$seleccionManzana,
+						$seleccionArea,
+						$seleccionDestino,
+						$seleccionRubro,
+						$seleccionUbicacion
+					);
 
-				foreach ($listaCompletaMaterial as $completaMaterial) {
+					if ($resultado['ok']) {
 
-					$cantidadTemp = 0;
-					$objetoTemp;
-					$i = 0;
-					$valor = false;
-
-
-					foreach ($listaMaterial as $material) {
-						if ($completaMaterial->getId() == $material->getId()) {
-
-							$cantidadTemp = $cantidadTemp + $listaCantidad[$i];
-							$objetoTemp = $material;
-							$valor = true;
+						if (!empty($resultado['alertasStockMinimo'])) {
+							$this->notificarAlertasStockMinimo($resultado['alertasStockMinimo'], $resultado['id']);
 						}
 
-						$i = $i + 1;
-						
+						$_SESSION['idSalida'] = $resultado['id'];
+
+						flash_now('success', 'Material sacado exitosamente.');
+
+						echo "<script>window.open('Controllers/SalidaMaterialPDF.php', '_blank')</script>";
+
+						//Se borrar variables de sesion
+						unset($_SESSION['listaMaterialSalida']);
+						unset($_SESSION['listaCantidadSalida']);
+						unset($_SESSION['seleccionContratista']);
+						unset($_SESSION['seleccionProyecto']);
+						unset($_SESSION['listaSeleccionCasa']);
+						unset($_SESSION['seleccionCasa']);
+						unset($_SESSION['listaSeleccionManzana']);
+						unset($_SESSION['seleccionManzana']);
+						unset($_SESSION['listaSeleccionArea']);
+						unset($_SESSION['seleccionArea']);
+						unset($_SESSION['listaSeleccionDestino']);
+						unset($_SESSION['seleccionDestino']);
+						unset($_SESSION['listaSeleccionRubro']);
+						unset($_SESSION['seleccionRubro']);
+						unset($_SESSION['listaSeleccionUbicacion']);
+						unset($_SESSION['seleccionUbicacion']);
+
+					}else{
+
+						foreach ($resultado['insuficientes'] as $insuficiente) {
+							$descripcion = $insuficiente['descripcion'];
+							$cantidadSaliente = $insuficiente['cantidadSolicitada'];
+							$cantidadInventario = $insuficiente['saldoInventario'];
+							$unidad = $insuficiente['unidad'];
+							flash_now('warning', "La cantidad de {$descripcion} que existe en inventario es {$cantidadInventario} {$unidad} y usted desea sacar {$cantidadSaliente} {$unidad}. Por lo tanto no se puede continuar con esta operación.");
+						}
 					}
 
-					if ($valor) {
-						array_push ( $objetoTotal , $objetoTemp );
-						array_push ( $cantidadTotal , $cantidadTemp );
-					}
-
+				} catch (PDOException $e) {
+					flash_now('danger', 'Ocurrió un error inesperado y la operación fue cancelada. Inténtelo nuevamente.');
+				} catch (Exception $e) {
+					flash_now('danger', $e->getMessage());
 				}
 
-
-				$i = 0;
-				$inventarioOk = true;
-				foreach ($objetoTotal as $material) {
-					if ($material->getSaldo() < $cantidadTotal[$i]) {
-						$descripcion = $material->getDescripcion();
-						$cantidadSaliente = $cantidadTotal[$i];
-						$cantidadInventario = $material->getSaldo();
-						$unidad = $material->getUnidad();
-						echo "<script>alert('La cantidad de ${descripcion} que existe en inventario es ${cantidadInventario} ${unidad} y usted desea sacar ${cantidadSaliente} ${unidad}. ¡ Por lo tanto NO se puede continuar con esta operacion !')</script>";
-						$inventarioOk = false;
-					}
-
-					$i = $i+1;
-				}
-
-
-
-				if ($inventarioOk == true) {
-					$i = 0;
-
-				//ACTUALIZA LA CANTIDAD DE MATERIAL
-				foreach ($listaMaterial as $material) {
-					
-					$id = $material->getId();
-					//Se llama al material directamente de la base de datos para actualizar 
-					//todas las salidas del mismo material
-					$saldoMaterial = Material::searchById($id);
-					$saldo = $saldoMaterial->getSaldo();
-					$minAlmacen = $saldoMaterial->getMinAlmacen();
-					$descripcion = $saldoMaterial->getDescripcion();
-					$unidad = $saldoMaterial->getUnidad();
-					$cantidad = $listaCantidad[$i];
-
-					$nuevoSaldo = $saldo - $cantidad;
-					Material::ingresoMaterial($id, $nuevoSaldo);
-
-					if ($nuevoSaldo <= $minAlmacen) {
-						# code...
-						$this->notificacion($descripcion, $nuevoSaldo, $unidad, $minAlmacen);
-					}
-
-					$i = $i + 1;
-					
-				}
-
-				$contratista = $seleccionContratista->getId();
-				$proyecto = $seleccionProyecto->getId(); 
-
-				$registroSalidas1 = new RegistroSalidas(null,$fechaActual,$hora,$usuario,$contratista,$proyecto);
-				RegistroSalidas::save($registroSalidas1);
-
-				$registroSalidas = RegistroSalidas::searchUltimoId();
-				$registroSalidasFin = end($registroSalidas);
-
-				$idUltimaSalida = $registroSalidasFin->getId();
-
-
-				$i = 0;
-				foreach ($listaMaterial as $material) {
-
-					$idMaterial = $material->getId();
-					$cantidad = $listaCantidad[$i];
-					$casa = $seleccionCasa[$i]->getId();
-					$manzana = $seleccionManzana[$i]->getId();
-					$area = $seleccionArea[$i]->getId();
-					$destino = $seleccionDestino[$i]->getId();
-					$rubro = $seleccionRubro[$i]->getId();
-
-
-					
-					$materialRegistroSalidas = new MaterialRegistroSalidas(null,$idMaterial,$idUltimaSalida,$cantidad,$casa,$manzana,$destino,$area,$rubro);
-					MaterialRegistroSalidas::save($materialRegistroSalidas);
-
-					$i = $i + 1;
-					
-				}
-
-				$_SESSION['idSalida'] = $idUltimaSalida;
-
-				
-				echo "<script>alert('¡ Material Sacado EXITOSAMENTE !')</script>";
-
-				
-
-				echo "<script>window.open('Controllers/SalidaMaterialPDF.php', '_blank')</script>";
-			
-				//Se borrar variables de sesion
-				unset($_SESSION['listaMaterialSalida']);
-				unset($_SESSION['listaCantidadSalida']);
-				unset($_SESSION['seleccionContratista']);
-				unset($_SESSION['seleccionProyecto']);
-				unset($_SESSION['listaSeleccionCasa']);
-				unset($_SESSION['seleccionCasa']);
-				unset($_SESSION['listaSeleccionManzana']);
-				unset($_SESSION['seleccionManzana']);
-				unset($_SESSION['listaSeleccionArea']);
-				unset($_SESSION['seleccionArea']);
-				unset($_SESSION['listaSeleccionDestino']);
-				unset($_SESSION['seleccionDestino']);
-				unset($_SESSION['listaSeleccionRubro']);
-				unset($_SESSION['seleccionRubro']);
-
-
-				
 				$this->show();
-				}else{
-					$this->show();
-				}
 
 
 			}else{
 
-				echo "<script>alert('¡ No se pudo sacar el Material... Porfavor verifique todas las entradas !')</script>";
+				flash_now('danger', 'No se pudo sacar el material... Por favor verifique todas las entradas.');
 				$this->show();
 
 			}
@@ -227,35 +160,78 @@ if (isset($_SESSION['usuario'])) {
 			
 		}else{
 
-			echo "<script>alert('¡ Seleccione primero el material a Sacar !')</script>";
+			flash_now('warning', 'Seleccione primero el material a sacar.');
 			$this->show();
 
 		}
 	
 	}
 
-	function notificacion($descripcion, $nuevoSaldo, $unidad, $minAlmacen){
-		//Enviar correo 
+	// Reemplaza a notificacion(): en vez de un correo por linea de material, agrupa TODAS las
+	// alertas de una misma Salida en un solo mensaje, y lee los destinatarios activos desde
+	// NotificacionDestinatario en vez de un unico correo fijo en mail.config.php (Fase de
+	// implementacion aprobada: Gestion de Destinatarios de Notificaciones por Correo).
+	function notificarAlertasStockMinimo($alertas, $idSalida){
+		$destinatarios = NotificacionDestinatario::activos();
+		if (empty($destinatarios)) {
+			return; // Sin destinatarios activos: no hay a quien enviar, no es un error.
+		}
+
+		if (!file_exists('mail.config.php')) {
+			return;
+		}
+		$mailConfig = require('mail.config.php');
 
 		$oMail = new PHPMailer();
 		$oMail->isSMTP();
-		$oMail->Host = "smtp.gmail.com";
-		$oMail->Port = 587;
-		$oMail->SMTPSecure = "tls";
+		$oMail->Host = $mailConfig['host'];
+		$oMail->Port = $mailConfig['port'];
+		$oMail->SMTPSecure = $mailConfig['smtp_secure'];
 		$oMail->SMTPAuth = true;
-		$oMail->Username = "diegolopez1797@gmail.com";
-		$oMail->Password = "zvthrmbnsshmbzjs";
-		$oMail->setFrom("diegolopez1797@gmail.com", "Almacen Berdez");
-		$oMail->addAddress("diegolopez1797@gmail.com");
+		$oMail->Username = $mailConfig['username'];
+		$oMail->Password = $mailConfig['password'];
+		$oMail->setFrom($mailConfig['from_email'], $mailConfig['from_name']);
+		$oMail->addAddress($mailConfig['from_email'], $mailConfig['from_name']); // "To": el propio remitente
+		foreach ($destinatarios as $destinatario) {
+			$oMail->addBCC($destinatario->getCorreo()); // BCC: los destinatarios reales nunca se ven entre si
+		}
+
 		$oMail->Subject = "ALMACEN INFORMA";
-		$oMail->msgHTML("¡¡¡ ALERTA !!! La cantidad de ".$descripcion." es de ".$nuevoSaldo." ".$unidad.". Por debajo o igual a ".$minAlmacen.", que es la cantidad minima que deberia existir en el almacen.");
+		$oMail->msgHTML($this->construirCuerpoAlertasStockMinimo($alertas, $idSalida));
 
 		if (!$oMail->send()) {
-			echo $oMail->ErrorInfo;
+			error_log('Fallo el envio de alertas de stock minimo (Salida #'.$idSalida.'): ' . $oMail->ErrorInfo);
+			flash_now('warning', 'La salida se registró correctamente, pero no se pudo enviar la notificación por correo.');
 		}
 	}
 
+	// Cuerpo agrupado: todos los materiales que cruzaron el minimo en UNA sola Salida, en una
+	// sola tabla. Fecha/hora se toman al momento de construir el correo (el envio es sincronico
+	// e inmediato, coincide con el momento real de la Salida); el numero de Salida ya esta
+	// disponible en $resultado['id'] al momento de llamar a este metodo, asi que se incluye
+	// para trazabilidad en vez de omitirlo.
+	function construirCuerpoAlertasStockMinimo($alertas, $idSalida){
+		$filas = '';
+		foreach ($alertas as $alerta) {
+			$filas .= '<tr>'
+				. '<td>' . h($alerta['descripcion']) . '</td>'
+				. '<td>' . (int) $alerta['nuevoSaldo'] . ' ' . h($alerta['unidad']) . '</td>'
+				. '<td>' . (int) $alerta['minAlmacen'] . ' ' . h($alerta['unidad']) . '</td>'
+				. '</tr>';
+		}
+
+		return '<h3>¡¡¡ ALERTA DE INVENTARIO !!!</h3>'
+			. '<p>Salida No: ' . (int) $idSalida . ' / Fecha: ' . date('Y-m-d H:i:s') . '</p>'
+			. '<p>Los siguientes materiales requieren reposición — su saldo llegó al mínimo o quedó por debajo de él:</p>'
+			. '<table border="1" cellpadding="4"><tr><th>Material</th><th>Saldo actual</th><th>Mínimo</th></tr>' . $filas . '</table>';
+	}
+
 	function show(){
+		if (!Permiso::usuarioPuede('salida.registrar')) {
+			flash('danger', 'No tiene permiso para registrar salidas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		//Busqueda y carga de los contratista
 		$listaContratista = Contratista::all();
@@ -284,6 +260,45 @@ if (isset($_SESSION['usuario'])) {
 		$listaProyecto = Proyecto::all();
 		$_SESSION['listaProyecto'] = $listaProyecto;
 
+		// El proyecto queda fijo (no editable) en cuanto la salida en curso ya tiene al menos
+		// un material - una salida nunca puede mezclar proyectos entre sus lineas.
+		$proyectoFijo = isset($_SESSION['listaMaterialSalida']) && count($_SESSION['listaMaterialSalida']) > 0;
+
+		//Busqueda y carga de ubicaciones (nivel generico: etapa/manzana/casa/torre/piso...),
+		//filtradas por el proyecto ya elegido en esta sesion (si aun no se elige ninguno, no
+		//se ofrece ubicacion todavia para no mezclar ubicaciones de proyectos distintos).
+		$listaUbicacion = isset($_SESSION['seleccionProyecto']) ? Ubicacion::hojasConRuta($_SESSION['seleccionProyecto']->getId()) : [];
+		$_SESSION['listaUbicacion'] = $listaUbicacion;
+
+		// Si el proyecto elegido ya tiene al menos una ubicacion activa (hoja), seleccionarla
+		// pasa a ser obligatorio (RegistroSalidas::registrar() ya lo exige); si no tiene
+		// ninguna, la vista debe permitir continuar sin bloquear al usuario.
+		$proyectoTieneEstructura = isset($_SESSION['seleccionProyecto']) && !empty($listaUbicacion);
+
+		// Arbol completo del proyecto elegido (para el selector jerarquico por niveles de la
+		// vista) - se consulta UNA sola vez por proyecto (cacheado en sesion) y nunca incluye
+		// ubicaciones de otros proyectos. Solo id/padreId/nombre/tipo/activo: lo minimo que el
+		// JS necesita para navegar por PadreID, nunca por Tipo.
+		if (isset($_SESSION['seleccionProyecto'])) {
+			$idProyectoActual = $_SESSION['seleccionProyecto']->getId();
+			if (!isset($_SESSION['arbolUbicacionProyectoId']) || $_SESSION['arbolUbicacionProyectoId'] != $idProyectoActual) {
+				$_SESSION['arbolUbicacionProyectoId'] = $idProyectoActual;
+				$_SESSION['arbolUbicacionJson'] = json_encode(array_map(function($u){
+					return [
+						'id' => (int) $u->getId(),
+						'padreId' => $u->getPadreId() !== null ? (int) $u->getPadreId() : null,
+						'nombre' => $u->getNombre(),
+						'tipo' => $u->getTipo(),
+						'activo' => (int) $u->getActivo(),
+					];
+				}, Ubicacion::todosPorProyecto($idProyectoActual)), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+			}
+		} else {
+			unset($_SESSION['arbolUbicacionProyectoId']);
+			$_SESSION['arbolUbicacionJson'] = '[]';
+		}
+		$arbolUbicacionJson = $_SESSION['arbolUbicacionJson'];
+
 		//$listaMaterialCompleta = Material::all();
 
 		require_once('Views/Salidas/salidas.php');
@@ -292,11 +307,65 @@ if (isset($_SESSION['usuario'])) {
 
 
 	function searchMaterial(){
+		if (!Permiso::usuarioPuede('salida.registrar')) {
+			flash('danger', 'No tiene permiso para registrar salidas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
+		// "Reiniciar salida": unico punto de salida cuando el usuario quiere empezar de cero
+		// con otro proyecto teniendo ya materiales en curso. Reutiliza esta misma accion (ya
+		// protegida por CSRF y ya autorizada en routing.php) en vez de crear una accion nueva.
+		if (isset($_REQUEST['btnReiniciar'])) {
+			unset(
+				$_SESSION['listaMaterialSalida'], $_SESSION['listaCantidadSalida'],
+				$_SESSION['seleccionContratista'], $_SESSION['seleccionProyecto'],
+				$_SESSION['listaSeleccionCasa'], $_SESSION['seleccionCasa'],
+				$_SESSION['listaSeleccionManzana'], $_SESSION['seleccionManzana'],
+				$_SESSION['listaSeleccionArea'], $_SESSION['seleccionArea'],
+				$_SESSION['listaSeleccionDestino'], $_SESSION['seleccionDestino'],
+				$_SESSION['listaSeleccionRubro'], $_SESSION['seleccionRubro'],
+				$_SESSION['listaSeleccionUbicacion'], $_SESSION['seleccionUbicacion'],
+				$_SESSION['arbolUbicacionProyectoId'], $_SESSION['arbolUbicacionJson'],
+				$_SESSION['listaUbicacion']
+			);
+			$this->show();
+			return;
+		}
+
+		// "Continuar" del Estado 1 (sin proyecto) al Estado 2 (proyecto elegido, sin
+		// materiales todavia) - fija el proyecto de la salida sin exigir todavia un codigo de
+		// material (la unica forma de fijar Proyecto antes, agregar-material, requeria codigo).
+		if (isset($_REQUEST['btnSeleccionarProyecto'])) {
+			$idProyecto = isset($_REQUEST['idProyecto']) ? $_REQUEST['idProyecto'] : 0;
+			if ($idProyecto != 0) {
+				$_SESSION['seleccionProyecto'] = Proyecto::searchById($idProyecto);
+			}
+			$this->show();
+			return;
+		}
+
+		// El proyecto queda fijo (no se puede cambiar) en cuanto la salida en curso ya tiene
+		// al menos un material - se calcula ANTES de cualquier mutacion de este request, para
+		// que un material que se este agregando en este mismo envio no cuente todavia.
+		$habiaMaterialesAntes = isset($_SESSION['listaMaterialSalida']) && count($_SESSION['listaMaterialSalida']) > 0;
+
+		// Una salida siempre pertenece a un Proyecto: si todavia no hay uno en sesion ni viene
+		// uno en este mismo envio, no se agrega ningun material (evita ademas cualquier acceso
+		// a un Proyecto inexistente mas adelante, sin Warning ni Fatal Error).
+		if (!isset($_REQUEST['btnIngresar'])) {
+			$idProyectoEntrante = isset($_REQUEST['idProyecto']) ? $_REQUEST['idProyecto'] : 0;
+			$hayProyecto = isset($_SESSION['seleccionProyecto']) || $idProyectoEntrante != 0;
+			if (!$hayProyecto) {
+				flash_now('warning', 'Debe seleccionar un proyecto antes de agregar materiales.');
+				$this->show();
+				return;
+			}
+		}
 
 		if (isset(($_REQUEST['btnIngresar']))) {
 
-			$_SESSION['listaCantidadSalida'] = $_REQUEST['listaCantidadSalida'];
+			$_SESSION['listaCantidadSalida'] = isset($_REQUEST['listaCantidadSalida']) ? $_REQUEST['listaCantidadSalida'] : [];
 
 
 					//CONTRATISTA
@@ -307,15 +376,31 @@ if (isset($_SESSION['usuario'])) {
 					}
 
 					//PROYECTO
-					$idProyecto = $_REQUEST['idProyecto'];
-					if ($idProyecto != 0) {
-						$_SESSION['seleccionProyecto'] = Proyecto::searchById($idProyecto);
+					$idProyectoSolicitado = $_REQUEST['idProyecto'];
+					$idProyectoActual = isset($_SESSION['seleccionProyecto']) ? $_SESSION['seleccionProyecto']->getId() : null;
+					$intentaCambiarProyecto = $idProyectoSolicitado != 0 && $idProyectoActual !== null && (int) $idProyectoActual !== (int) $idProyectoSolicitado;
 
+					if ($intentaCambiarProyecto && $habiaMaterialesAntes) {
+						// El proyecto ya quedo fijo (la salida en curso ya tiene materiales) -
+						// se ignora el intento de cambio, incluso si llega manipulado por HTTP
+						// directo, y el proyecto de sesion no se toca.
+						flash_now('warning', 'Esta salida ya tiene materiales seleccionados. El proyecto no se puede cambiar, use "Reiniciar salida" para empezar de nuevo con otro proyecto.');
+						$idProyecto = $idProyectoActual;
+						$proyectoCambio = false;
+					} else {
+						$idProyecto = $idProyectoSolicitado;
+						// Si el proyecto cambia (solo posible cuando aun no hay materiales),
+						// cualquier Ubicacion ya elegida en este mismo envio (del arbol viejo
+						// aun no refrescado en el cliente) debe descartarse.
+						$proyectoCambio = $intentaCambiarProyecto;
+						if ($idProyecto != 0) {
+							$_SESSION['seleccionProyecto'] = Proyecto::searchById($idProyecto);
+						}
 					}
-					
+
 					//CASA --------------------------------------------------------
 
-					$_SESSION['listaSeleccionCasa'] = $_REQUEST['listaSeleccionCasa'];
+					$_SESSION['listaSeleccionCasa'] = isset($_REQUEST['listaSeleccionCasa']) ? $_REQUEST['listaSeleccionCasa'] : [];
 
 					$seleccionCasa = [];
 
@@ -335,7 +420,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//MANZANA------------------------------------------------------
 
-					$_SESSION['listaSeleccionManzana'] = $_REQUEST['listaSeleccionManzana'];
+					$_SESSION['listaSeleccionManzana'] = isset($_REQUEST['listaSeleccionManzana']) ? $_REQUEST['listaSeleccionManzana'] : [];
 
 					$seleccionManzana = [];
 
@@ -353,7 +438,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//AREA------------------------------------------------------
 
-					$_SESSION['listaSeleccionArea'] = $_REQUEST['listaSeleccionArea'];
+					$_SESSION['listaSeleccionArea'] = isset($_REQUEST['listaSeleccionArea']) ? $_REQUEST['listaSeleccionArea'] : [];
 
 					$seleccionArea = [];
 
@@ -372,7 +457,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//DESTINO------------------------------------------------------
 
-					$_SESSION['listaSeleccionDestino'] = $_REQUEST['listaSeleccionDestino'];
+					$_SESSION['listaSeleccionDestino'] = isset($_REQUEST['listaSeleccionDestino']) ? $_REQUEST['listaSeleccionDestino'] : [];
 
 					$seleccionDestino = [];
 
@@ -390,7 +475,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//RUBRO------------------------------------------------------
 
-					$_SESSION['listaSeleccionRubro'] = $_REQUEST['listaSeleccionRubro'];
+					$_SESSION['listaSeleccionRubro'] = isset($_REQUEST['listaSeleccionRubro']) ? $_REQUEST['listaSeleccionRubro'] : [];
 
 					$seleccionRubro = [];
 
@@ -406,7 +491,25 @@ if (isset($_SESSION['usuario'])) {
 
 					$_SESSION['seleccionRubro'] = $seleccionRubro;
 
-			
+					//UBICACION (generica: etapa/manzana/casa/torre/piso...) ------------------
+
+					$_SESSION['listaSeleccionUbicacion'] = isset($_REQUEST['listaSeleccionUbicacion']) ? $_REQUEST['listaSeleccionUbicacion'] : [];
+
+					$seleccionUbicacion = [];
+
+					foreach ($_SESSION['listaSeleccionUbicacion'] as $lista) {
+						if ($lista != 0 && !$proyectoCambio) {
+							$ubicacion = Ubicacion::searchById($lista);
+							array_push ( $seleccionUbicacion , $ubicacion );
+						}else{
+							$vacio = null;
+							array_push ( $seleccionUbicacion , $vacio );
+						}
+					}
+
+					$_SESSION['seleccionUbicacion'] = $seleccionUbicacion;
+
+
 			$this->save();
 
 			
@@ -431,8 +534,8 @@ if (isset($_SESSION['usuario'])) {
 
 			if (empty($codigo) or $codigo < 0) {
 
-				$_SESSION['listaCantidadSalida'] = $_REQUEST['listaCantidadSalida'];
-				echo "<script>alert('¡ No a ingresado un codigo o el valor ingresado NO ES VALIDO !')</script>";
+				$_SESSION['listaCantidadSalida'] = isset($_REQUEST['listaCantidadSalida']) ? $_REQUEST['listaCantidadSalida'] : [];
+				flash_now('warning', 'No ha ingresado un código o el valor ingresado no es válido.');
 
 			}else{
 
@@ -441,7 +544,7 @@ if (isset($_SESSION['usuario'])) {
 				if ($material->getCodigo() == $codigo) {
 					array_push ( $listaMaterialSalida , $material );
 					$_SESSION['listaMaterialSalida'] = $listaMaterialSalida;
-					$_SESSION['listaCantidadSalida'] = $_REQUEST['listaCantidadSalida'];	
+					$_SESSION['listaCantidadSalida'] = isset($_REQUEST['listaCantidadSalida']) ? $_REQUEST['listaCantidadSalida'] : [];	
 
 
 					//CONTRATISTA
@@ -452,16 +555,32 @@ if (isset($_SESSION['usuario'])) {
 					}
 
 					//PROYECTO
-					$idProyecto = $_REQUEST['idProyecto'];
 					//echo $idProyecto;
-					if ($idProyecto != 0) {
-						$_SESSION['seleccionProyecto'] = Proyecto::searchById($idProyecto);
+					$idProyectoSolicitado = $_REQUEST['idProyecto'];
+					$idProyectoActual = isset($_SESSION['seleccionProyecto']) ? $_SESSION['seleccionProyecto']->getId() : null;
+					$intentaCambiarProyecto = $idProyectoSolicitado != 0 && $idProyectoActual !== null && (int) $idProyectoActual !== (int) $idProyectoSolicitado;
 
+					if ($intentaCambiarProyecto && $habiaMaterialesAntes) {
+						// El proyecto ya quedo fijo (la salida en curso ya tiene materiales) -
+						// se ignora el intento de cambio, incluso si llega manipulado por HTTP
+						// directo, y el proyecto de sesion no se toca.
+						flash_now('warning', 'Esta salida ya tiene materiales seleccionados. El proyecto no se puede cambiar, use "Reiniciar salida" para empezar de nuevo con otro proyecto.');
+						$idProyecto = $idProyectoActual;
+						$proyectoCambio = false;
+					} else {
+						$idProyecto = $idProyectoSolicitado;
+						// Si el proyecto cambia (solo posible cuando aun no hay materiales),
+						// cualquier Ubicacion ya elegida en este mismo envio (del arbol viejo
+						// aun no refrescado en el cliente) debe descartarse.
+						$proyectoCambio = $intentaCambiarProyecto;
+						if ($idProyecto != 0) {
+							$_SESSION['seleccionProyecto'] = Proyecto::searchById($idProyecto);
+						}
 					}
 
 					//CASA --------------------------------------------------------
 
-					$_SESSION['listaSeleccionCasa'] = $_REQUEST['listaSeleccionCasa'];
+					$_SESSION['listaSeleccionCasa'] = isset($_REQUEST['listaSeleccionCasa']) ? $_REQUEST['listaSeleccionCasa'] : [];
 
 					$seleccionCasa = [];
 
@@ -481,7 +600,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//MANZANA------------------------------------------------------
 
-					$_SESSION['listaSeleccionManzana'] = $_REQUEST['listaSeleccionManzana'];
+					$_SESSION['listaSeleccionManzana'] = isset($_REQUEST['listaSeleccionManzana']) ? $_REQUEST['listaSeleccionManzana'] : [];
 
 					$seleccionManzana = [];
 
@@ -499,7 +618,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//AREA------------------------------------------------------
 
-					$_SESSION['listaSeleccionArea'] = $_REQUEST['listaSeleccionArea'];
+					$_SESSION['listaSeleccionArea'] = isset($_REQUEST['listaSeleccionArea']) ? $_REQUEST['listaSeleccionArea'] : [];
 
 					$seleccionArea = [];
 
@@ -518,7 +637,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//DESTINO------------------------------------------------------
 
-					$_SESSION['listaSeleccionDestino'] = $_REQUEST['listaSeleccionDestino'];
+					$_SESSION['listaSeleccionDestino'] = isset($_REQUEST['listaSeleccionDestino']) ? $_REQUEST['listaSeleccionDestino'] : [];
 
 					$seleccionDestino = [];
 
@@ -536,7 +655,7 @@ if (isset($_SESSION['usuario'])) {
 
 					//RUBRO------------------------------------------------------
 
-					$_SESSION['listaSeleccionRubro'] = $_REQUEST['listaSeleccionRubro'];
+					$_SESSION['listaSeleccionRubro'] = isset($_REQUEST['listaSeleccionRubro']) ? $_REQUEST['listaSeleccionRubro'] : [];
 
 					$seleccionRubro = [];
 
@@ -551,12 +670,29 @@ if (isset($_SESSION['usuario'])) {
 					}
 
 					$_SESSION['seleccionRubro'] = $seleccionRubro;
-	
+
+					//UBICACION (generica: etapa/manzana/casa/torre/piso...) ------------------
+
+					$_SESSION['listaSeleccionUbicacion'] = isset($_REQUEST['listaSeleccionUbicacion']) ? $_REQUEST['listaSeleccionUbicacion'] : [];
+
+					$seleccionUbicacion = [];
+
+					foreach ($_SESSION['listaSeleccionUbicacion'] as $lista) {
+						if ($lista != 0 && !$proyectoCambio) {
+							$ubicacion = Ubicacion::searchById($lista);
+							array_push ( $seleccionUbicacion , $ubicacion );
+						}else{
+							$vacio = null;
+							array_push ( $seleccionUbicacion , $vacio );
+						}
+					}
+
+					$_SESSION['seleccionUbicacion'] = $seleccionUbicacion;
 
 				}else{
-					echo "<script>alert('¡ El matarial buscado NO EXISTE !')</script>";
-				}	
-			}		
+					flash_now('warning', 'El material buscado no existe.');
+				}
+			}
 			
 			$this->show();
 
@@ -565,6 +701,11 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function quitarMaterial(){
+		if (!Permiso::usuarioPuede('salida.registrar')) {
+			flash('danger', 'No tiene permiso para registrar salidas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		$i = $_GET['id'];
 
@@ -575,6 +716,7 @@ if (isset($_SESSION['usuario'])) {
 		$seleccionArea = $_SESSION['seleccionArea'];
 		$seleccionDestino = $_SESSION['seleccionDestino'];
 		$seleccionRubro = $_SESSION['seleccionRubro'];
+		$seleccionUbicacion = isset($_SESSION['seleccionUbicacion']) ? $_SESSION['seleccionUbicacion'] : [];
 
 		unset($listaMaterialSalida[$i]);
 		unset($listaCantidadSalida[$i]);
@@ -583,6 +725,7 @@ if (isset($_SESSION['usuario'])) {
 		unset($seleccionArea[$i]);
 		unset($seleccionDestino[$i]);
 		unset($seleccionRubro[$i]);
+		unset($seleccionUbicacion[$i]);
 
 		try {
 			$_SESSION['listaMaterialSalida'] = array_values($listaMaterialSalida);
@@ -592,6 +735,7 @@ if (isset($_SESSION['usuario'])) {
 			$_SESSION['seleccionArea'] = array_values($seleccionArea);
 			$_SESSION['seleccionDestino'] = array_values($seleccionDestino);
 			$_SESSION['seleccionRubro'] = array_values($seleccionRubro);
+			$_SESSION['seleccionUbicacion'] = array_values($seleccionUbicacion);
 		}catch (Error $e) {
 
 		}

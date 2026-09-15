@@ -1,6 +1,7 @@
 <div class="container">
   <h2>Crear Usuario</h2>
   <form action="?controller=Usuario&&action=save" method="POST">
+  <?php echo Csrf::field(); ?>
 
     <div class="form-group">
       <label for="text">Identificacion</label>
@@ -19,14 +20,15 @@
 
     <div class="form-group">
       <label for="text">Clave</label>
-      <input type="text" name="clave" class="form-control" placeholder="Ingrese Clave" required>
+      <input type="password" name="clave" class="form-control" placeholder="Ingrese Clave" required>
     </div>
 
     <div class="form-group">
       <label for="text">Rol</label>
       <select name="rol" class="form-control">
-         <option value="2">Almacenista</option>
-         <option value="1">Administrador</option>   
+        <?php foreach ($listaRol as $rol) {?>
+        <option value="<?php echo $rol->getId(); ?>"><?php echo h($rol->getDescripcion()); ?></option>
+        <?php } ?>
       </select>
       <br>
     </div>

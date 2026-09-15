@@ -57,6 +57,13 @@
     width:100%;
 }
 
+/* Tercer nivel (ej. Informes > Informe Salida > Por casa): se abre hacia el lado
+   para no superponerse con los demas items del segundo nivel. */
+.menuCSS3 ul li ul li ul{
+    top:0;
+    left:100%;
+}
+
 #boton-cerrar{
     margin-left:auto;
     margin-right:20px;

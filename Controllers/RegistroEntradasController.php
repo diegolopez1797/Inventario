@@ -11,6 +11,11 @@ class RegistroEntradasController{
 
     
 	function save(){
+		if (!Permiso::usuarioPuede('entrada.registrar')) {
+			flash('danger', 'No tiene permiso para registrar entradas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		if (isset($_SESSION['listaMaterial'])) {
 			
@@ -18,6 +23,8 @@ class RegistroEntradasController{
 			$listaCantidad = $_SESSION['listaCantidad'];
 			$seleccionDestino = $_SESSION['seleccionDestinoEntrada'];
 			$listaSeleccionDestino = $_SESSION['listaSeleccionDestinoEntrada'];
+			$listaCostoUnitario = isset($_SESSION['listaCostoUnitario']) ? $_SESSION['listaCostoUnitario'] : [];
+			$seleccionProveedorEntrada = isset($_SESSION['seleccionProveedorEntrada']) ? $_SESSION['seleccionProveedorEntrada'] : null;
 			$fechaActual = date('Y-m-d');
 			$hora = date('H:i:s');
 			$usuario = $_SESSION['usuario']->getId();
@@ -41,62 +48,33 @@ class RegistroEntradasController{
 				
 			if ($listaOk == true) {
 
-				$i = 0;
-				foreach ($listaMaterial as $material) {
+				try {
 
-					$id = $material->getId();
-					//Se llama al material directamente de la base de datos para actualizar 
-					//todas las salidas del mismo material
-					$saldoMaterial = Material::searchById($id);
-					$saldo = $saldoMaterial->getSaldo();
-					$cantidad = $listaCantidad[$i];
+					$idProveedorEntrada = $seleccionProveedorEntrada !== null ? $seleccionProveedorEntrada->getId() : null;
+					$idUltimaEntrada = RegistroEntradas::registrar($fechaActual, $hora, $usuario, $listaMaterial, $listaCantidad, $seleccionDestino, $listaCostoUnitario, $idProveedorEntrada);
 
-					$nuevoSaldo = $saldo + $cantidad;
-					Material::ingresoMaterial($id, $nuevoSaldo);
+					$_SESSION['idEntrada'] = $idUltimaEntrada;
 
-					$i = $i + 1;
-					
-				}
-				$registroEntradas1 = new RegistroEntradas(null,$fechaActual,$hora,$usuario);
-				RegistroEntradas::save($registroEntradas1);
+					flash_now('success', 'Material ingresado exitosamente.');
 
-				$registroEntradas = RegistroEntradas::searchUltimoId();
-				$registroEntradasFin = end($registroEntradas);
-				$idUltimaEntrada = $registroEntradasFin->getId();
+					echo "<script>window.open('Controllers/EntradaMaterialPDF.php', '_blank')</script>";
 
+					unset($_SESSION['listaMaterial']);
+					unset($_SESSION['listaCantidad']);
+					unset($_SESSION['listaDestinoEntrada']);
+					unset($_SESSION['listaCostoUnitario']);
+					unset($_SESSION['seleccionProveedorEntrada']);
 
-				$i = 0;
-				foreach ($listaMaterial as $material) {
-
-					$idMaterial = $material->getId();
-					$cantidad = $listaCantidad[$i];
-					$destino = $seleccionDestino[$i]->getId();
-					
-					$materialRegistroEntradas = new MaterialRegistroEntradas(null,$idMaterial,$idUltimaEntrada,$cantidad,$destino);
-					MaterialRegistroEntradas::save($materialRegistroEntradas);
-
-					$i = $i + 1;
-					
+				} catch (PDOException $e) {
+					flash_now('danger', 'Ocurrió un error inesperado y la operación fue cancelada. Inténtelo nuevamente.');
 				}
 
-				$_SESSION['idEntrada'] = $idUltimaEntrada;
-
-				
-				echo "<script>alert('¡ Material Ingresado EXITOSAMENTE !')</script>";
-
-				echo "<script>window.open('Controllers/EntradaMaterialPDF.php', '_blank')</script>";
-			
-				unset($_SESSION['listaMaterial']);
-				unset($_SESSION['listaCantidad']);
-				unset($_SESSION['listaDestinoEntrada']);
-
-				
 				$this->show();
 
 
 			}else{
 
-				echo "<script>alert('¡ Por favor llene todos los campos de cantidad y/o verifique que los valores sean mayores a Cero !')</script>";
+				flash_now('warning', 'Por favor llene todos los campos de cantidad y/o verifique que los valores sean mayores a cero.');
 				$this->show();
 
 			}
@@ -104,7 +82,7 @@ class RegistroEntradasController{
 			
 		}else{
 
-			echo "<script>alert('¡ Seleccione primero el material a ingresar !')</script>";
+			flash_now('warning', 'Seleccione primero el material a ingresar.');
 			$this->show();
 
 		}
@@ -112,18 +90,30 @@ class RegistroEntradasController{
 	}
 
 	function show(){
+		if (!Permiso::usuarioPuede('entrada.registrar')) {
+			flash('danger', 'No tiene permiso para registrar entradas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		// $listaMaterialCompleta = Material::all();
 		// Busqueda y carga de los rubros
 		$listaDestino = Destino::all();
 		$_SESSION['listaDestinoEntrada'] = $listaDestino;
 
+		$listaProveedor = Proveedor::all();
+		$_SESSION['listaProveedor'] = $listaProveedor;
+
 		require_once('Views/Entradas/entradas.php');
 	}
 
 
 	function searchMaterial(){
-
+		if (!Permiso::usuarioPuede('entrada.registrar')) {
+			flash('danger', 'No tiene permiso para registrar entradas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		if (isset(($_REQUEST['btnIngresar']))) {
 
@@ -144,6 +134,15 @@ class RegistroEntradasController{
 			}
 
 			$_SESSION['seleccionDestinoEntrada'] = $seleccionDestino;
+
+			//COSTO (opcional) y PROVEEDOR (a nivel de cabecera, igual que Contratista en Salidas) --
+
+			$_SESSION['listaCostoUnitario'] = isset($_REQUEST['listaCostoUnitario']) ? $_REQUEST['listaCostoUnitario'] : [];
+
+			$idProveedor = isset($_REQUEST['idProveedor']) ? $_REQUEST['idProveedor'] : 0;
+			if ($idProveedor != 0) {
+				$_SESSION['seleccionProveedorEntrada'] = Proveedor::searchById($idProveedor);
+			}
 
 			$this->save();
 
@@ -170,7 +169,7 @@ class RegistroEntradasController{
 			if (empty($codigo) or $codigo < 0) {
 
 				$_SESSION['listaCantidad'] = $_REQUEST['listaCantidad'];
-				echo "<script>alert('¡ No a ingresado un codigo o el valor ingresado NO ES VALIDO !')</script>";
+				flash_now('warning', 'No ha ingresado un código o el valor ingresado no es válido.');
 
 			//}elseif ($MaterialR == true){
 
@@ -203,10 +202,19 @@ class RegistroEntradasController{
 					}
 
 					$_SESSION['seleccionDestinoEntrada'] = $seleccionDestino;
-					
+
+					//COSTO (opcional) y PROVEEDOR (a nivel de cabecera, igual que Contratista en Salidas) --
+
+					$_SESSION['listaCostoUnitario'] = isset($_REQUEST['listaCostoUnitario']) ? $_REQUEST['listaCostoUnitario'] : [];
+
+					$idProveedor = isset($_REQUEST['idProveedor']) ? $_REQUEST['idProveedor'] : 0;
+					if ($idProveedor != 0) {
+						$_SESSION['seleccionProveedorEntrada'] = Proveedor::searchById($idProveedor);
+					}
+
 				}else{
-					echo "<script>alert('¡ El matarial buscado NO EXISTE !')</script>";
-				}	
+					flash_now('warning', 'El material buscado no existe.');
+				}
 			}		
 			
 			$this->show();
@@ -216,23 +224,31 @@ class RegistroEntradasController{
 	}
 
 	function quitarMaterial(){
+		if (!Permiso::usuarioPuede('entrada.registrar')) {
+			flash('danger', 'No tiene permiso para registrar entradas.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		$i = $_GET['id'];
 
 		$listaMaterial = $_SESSION['listaMaterial'];
 		$listaCantidad = $_SESSION['listaCantidad'];
 		$seleccionDestinoEntrada = $_SESSION['seleccionDestinoEntrada'];
+		$listaCostoUnitario = isset($_SESSION['listaCostoUnitario']) ? $_SESSION['listaCostoUnitario'] : [];
 
 		unset($listaMaterial[$i]);
 		unset($listaCantidad[$i]);
 		unset($seleccionDestinoEntrada[$i]);
+		unset($listaCostoUnitario[$i]);
 
 		try {
 			$_SESSION['listaMaterial'] = array_values($listaMaterial);
 			$_SESSION['listaCantidad'] = array_values($listaCantidad);
 			$_SESSION['seleccionDestinoEntrada'] = array_values($seleccionDestinoEntrada);
+			$_SESSION['listaCostoUnitario'] = array_values($listaCostoUnitario);
 		}catch (Error $e) {
-			
+
 		}
 		
 

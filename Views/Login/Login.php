@@ -9,6 +9,7 @@
 		</div>
 
         <form action="?controller=Login&action=verificar" method="post">
+            <?php echo Csrf::field(); ?>
             <div class="login-form">
                 <div class="control-group">
                     <input type="text" class="login-field" placeholder="Identificación"

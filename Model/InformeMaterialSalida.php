@@ -109,7 +109,7 @@ class InformeMaterialSalida
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID']);
+			$materialRegistroEntradas[] = new MaterialRegistroSalidas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_SalidasID'],$entrada['Cantidad'],$entrada['CasaID'],$entrada['ManzanaID'],$entrada['DestinoID'],$entrada['AreaID'],$entrada['RubroID'],$entrada['UbicacionID'],$entrada['CostoUnitario']);
 
 		}
 		

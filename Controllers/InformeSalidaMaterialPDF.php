@@ -8,11 +8,9 @@ require_once('../Model/Proyecto.php');
 require_once('../Model/RegistroSalidas.php');
 require_once('../Model/MaterialRegistroSalidas.php');
 require_once('../connection.php');
-require_once('../Model/Manzana.php');
-require_once('../Model/Casa.php');
-require_once('../Model/Area.php');
 require_once('../Model/Destino.php');
 require_once('../Model/Rubro.php');
+require_once('../Model/Ubicacion.php');
 require_once(__DIR__ . '/../fpdf/FPDF_Alpha.php');
 
 session_start();
@@ -66,11 +64,9 @@ function Header()
     $this->Cell(60, 10, 'Descripcion', 0, 0, 'C', 0);
     $this->Cell(30, 10, 'Unidad', 0, 0, 'C', 0);
     $this->Cell(20, 10, 'Cantidad', 0, 0, 'C', 0);
-    $this->Cell(20, 10, 'Etapa', 0, 0, 'C', 0);
-    $this->Cell(20, 10, 'Manzana', 0, 0, 'C', 0);
-    $this->Cell(20, 10, 'Casa', 0, 0, 'C', 0);
-    $this->Cell(30, 10, 'Destino', 0, 0, 'C', 0);
-    $this->Cell(30, 10, 'Actividad', 0, 1, 'C', 0);
+    $this->Cell(40, 10, 'Destino', 0, 0, 'C', 0);
+    $this->Cell(40, 10, 'Actividad', 0, 0, 'C', 0);
+    $this->Cell(60, 10, 'Ubicacion', 0, 1, 'C', 0);
 }
 
 // Pie de página
@@ -101,22 +97,18 @@ $pdf->SetFont('Times','',12);
 foreach ($materialRegistroSalidas as $salidas){
 
     $material = Material::searchById($salidas->getMaterialId());
-    
-    $manzana = Manzana::searchById($salidas->getManzanaId());
-    $casa = Casa::searchById($salidas->getCasaId());
-    $area = Area::searchById($salidas->getAreaId());
-    $destino = Destino::searchById($salidas->getDestinoId());
-    $rubro = Rubro::searchById($salidas->getRubroId());
+
+    $destino = $salidas->getDestinoId() !== null ? Destino::searchById($salidas->getDestinoId()) : null;
+    $rubro = $salidas->getRubroId() !== null ? Rubro::searchById($salidas->getRubroId()) : null;
+    $ubicacionRuta = $salidas->getUbicacionId() !== null ? Ubicacion::ruta($salidas->getUbicacionId()) : null;
 
     $pdf->Cell(30, 6, $material->getCodigo(), 0, 0, 'C', 0);
     $pdf->Cell(60, 6, $material->getDescripcion(), 0, 0, 'C', 0);
     $pdf->Cell(30, 6, $material->getUnidad(), 0, 0, 'C', 0);
     $pdf->Cell(20, 6, $salidas->getCantidad(), 0, 0, 'C', 0);
-    $pdf->Cell(20, 6, $area->getDescripcion(), 0, 0, 'C', 0);
-    $pdf->Cell(20, 6, $manzana->getDescripcion(), 0, 0, 'C', 0);
-    $pdf->Cell(20, 6, $casa->getDescripcion(), 0, 0, 'C', 0);
-    $pdf->Cell(30, 6, $destino->getDescripcion(), 0, 0, 'C', 0);
-    $pdf->Cell(30, 6, $rubro->getDescripcion(), 0, 1, 'C', 0);
+    $pdf->Cell(40, 6, $destino !== null ? $destino->getDescripcion() : 'N/D', 0, 0, 'C', 0);
+    $pdf->Cell(40, 6, $rubro !== null ? $rubro->getDescripcion() : 'N/D', 0, 0, 'C', 0);
+    $pdf->Cell(60, 6, $ubicacionRuta !== null ? $ubicacionRuta : 'N/D', 0, 1, 'C', 0);
 
 }
 ob_end_clean();

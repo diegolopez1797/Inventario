@@ -6,15 +6,13 @@
 	$proyecto = Proyecto::searchById($registroSalidas->getProyecto());
 	?>
 	<h5 align="center">Fecha: <?php echo $registroSalidas->getFecha()?> / Hora: <?php echo $registroSalidas->getHora()?></h5>
-	<h5 align="center">Realizada por: <?php echo $usuario->getNombre().' '.$usuario->getApellido()?> / Entregado a: <?php echo $contratista->getDescripcion()?></h5>
-	<h5 align="center">Proyecto: <?php echo $proyecto->getDescripcion()?></h5>
-	<form class="form-inline" action="?controller=InformeGeneral&action=search" method="post">
-		<div class="form-group row">
-			<div class="col-xs-4">
-				<a class="btn btn-success" href="?controller=InformeSalida&action=generarPDF"><span class="glyphicon glyphicon-file"></span> Generar PDF</a>
-			</div>
-		</div class="form-group row">
-	</form>
+	<h5 align="center">Realizada por: <?php echo h($usuario->getNombre().' '.$usuario->getApellido()); ?> / Entregado a: <?php echo h($contratista->getDescripcion()); ?></h5>
+	<h5 align="center">Proyecto: <?php echo h($proyecto->getDescripcion()); ?></h5>
+	<div class="form-group row">
+		<div class="col-xs-4">
+			<a class="btn btn-success" href="?controller=InformeSalida&action=generarPDF"><span class="glyphicon glyphicon-file"></span> Generar PDF</a>
+		</div>
+	</div>
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>
@@ -23,36 +21,29 @@
 					<th>Descripcion</th>
 					<th>Unidad</th>
 					<th>Cantidad</th>
-					<th>Etapa</th>
-					<th>Manzana</th>
-					<th>Casa</th>
 					<th>Destino</th>
 					<th>Actividad</th>
+					<th>Ubicación</th>
 				</tr>
 				<tbody>
 					<?php $i = 0?>
 					<?php foreach ($materialRegistroSalidas as $salida) {
 
-						$destino = Destino::searchById($salida->getDestinoId());
-						$rubro = Rubro::searchById($salida->getRubroId());
-						$casa = Casa::searchById($salida->getCasaId());
-						$manzana = Manzana::searchById($salida->getManzanaId());
-						$area = Area::searchById($salida->getAreaId());
-						
+						$destino = $salida->getDestinoId() !== null ? Destino::searchById($salida->getDestinoId()) : null;
+						$rubro = $salida->getRubroId() !== null ? Rubro::searchById($salida->getRubroId()) : null;
+						$ubicacionRuta = $salida->getUbicacionId() !== null ? Ubicacion::ruta($salida->getUbicacionId()) : null;
 
 
 					?>
 					<tr>
 						<td><?php echo $material[$i]->getCodigo(); ?></td>
-						<td><?php echo $material[$i]->getDescripcion(); ?></td>
-						<td><?php echo $material[$i]->getUnidad(); ?></td>
+						<td><?php echo h($material[$i]->getDescripcion()); ?></td>
+						<td><?php echo h($material[$i]->getUnidad()); ?></td>
 						<td><?php echo $salida->getCantidad(); ?></td>
-						<td><?php echo $area->getDescripcion(); ?></td>
-						<td><?php echo $manzana->getDescripcion(); ?></td>
-						<td><?php echo $casa->getDescripcion(); ?></td>
-						<td><?php echo $destino->getDescripcion(); ?></td>
-						<td><?php echo $rubro->getDescripcion(); ?></td>
-						
+						<td><?php echo $destino !== null ? h($destino->getDescripcion()) : 'N/D'; ?></td>
+						<td><?php echo $rubro !== null ? h($rubro->getDescripcion()) : 'N/D'; ?></td>
+						<td><?php echo $ubicacionRuta !== null ? h($ubicacionRuta) : 'N/D'; ?></td>
+
 					</tr>
 					<?php $i=$i+1; ?>
 					<?php } ?>

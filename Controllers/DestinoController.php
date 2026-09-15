@@ -13,23 +13,39 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function register(){
+		if (!Permiso::usuarioPuede('catalogo.gestionar')) {
+			flash('danger', 'No tiene permiso para esta acción.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		require_once('Views/Destino/register.php');
 	}
 
 	function save(){
+		if (!Permiso::usuarioPuede('catalogo.gestionar')) {
+			flash('danger', 'No tiene permiso para esta acción.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		$destino = new Destino(null,$_POST['descripcion']);
 		$respuesta = Destino::save($destino);
 		if(isset($respuesta)){
-		    echo "<script>alert('¡ Destino Creado Exitosamente !')</script>";
+		    flash_now('success', 'Destino creado exitosamente.');
 		}
 		else{
-		    echo "<script>alert('¡ Ups... No se ha podido guardar el Destino. Intentalo Nuevamente !')</script>";
+		    flash_now('danger', 'No se ha podido guardar el destino. Inténtelo nuevamente.');
 		}
 			$this->show();
 	}
 
 	function show(){
+		if (!Permiso::usuarioPuede('catalogo.ver')) {
+			flash('danger', 'No tiene permiso para ver este catálogo.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		$listaDestino = Destino::all();
 
@@ -37,30 +53,53 @@ if (isset($_SESSION['usuario'])) {
 	}
 
 	function updateshow(){
+		if (!Permiso::usuarioPuede('catalogo.gestionar')) {
+			flash('danger', 'No tiene permiso para esta acción.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		$id = $_GET['id'];
 		$destino = Destino::searchByIdUpdate($id);
 		require_once('Views/Destino/updateshow.php');
 	}
 
 	function update(){
+		if (!Permiso::usuarioPuede('catalogo.gestionar')) {
+			flash('danger', 'No tiene permiso para esta acción.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		$destino = new Destino($_POST['id'],$_POST['descripcion']);
 		Destino::update($destino);
 		$this->show();
 	}
 	function delete(){
+		if (!Permiso::usuarioPuede('catalogo.gestionar')) {
+			flash('danger', 'No tiene permiso para esta acción.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
 
 		$id=$_GET['id'];
 
 		try{
 			Destino::delete($id);
 		}catch (Exception $e) {
-			echo "<script>alert('¡ Ups... No se puede eliminar el destino !')</script>";
+			flash_now('danger', 'No se puede eliminar el destino.');
 		}
-		
+
 		$this->show();
 	}
 
 	function search(){
+		if (!Permiso::usuarioPuede('catalogo.ver')) {
+			flash('danger', 'No tiene permiso para ver este catálogo.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		if ((!empty($_POST['id'])) and ($_POST['id']>=1)) {
 			$id = $_POST['id'];
 			$destino = Destino::searchById($id);
@@ -68,11 +107,11 @@ if (isset($_SESSION['usuario'])) {
 				$listaDestino[] = $destino;
 				require_once('Views/Destino/show.php');
 			}else{
-				echo "<script>alert('¡ El destino buscado NO EXISTE !')</script>";
+				flash_now('warning', 'El destino buscado no existe.');
 				$this->show();
-			}	
+			}
 		} else {
-			echo "<script>alert('¡ No a ingresado un codigo o el valor ingresado NO ES VALIDO !')</script>";
+			flash_now('warning', 'No ha ingresado un código o el valor ingresado no es válido.');
 			$this->show();
 		}
 	}

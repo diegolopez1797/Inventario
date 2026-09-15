@@ -6,27 +6,23 @@ if (isset($_SESSION['usuario'])) {
 
 	class InformeSalidaController
 {
-	
+
 	function __construct()
 	{
-		
+
 	}
 
-	function show(){
-
-
-		if (!empty($_SESSION['informeSalidaParcial'])) {
-			$_SESSION['informeSalidaGeneral'] = $_SESSION['informeSalidaParcial'];
-		}else{
-			$_SESSION['informeSalidaTotal'] = InformeSalida::all();
-			$_SESSION['informeSalidaGeneral'] = $_SESSION['informeSalidaTotal'];
-		}
-		//---------------------------------------------------------------
-
-		require_once('Views/Informes/InformeSalida.php');
-	}
-
+	// El listado propio de este informe (show/search/eliminar/generarSalidaPDF) se elimino -
+	// Movimientos lo reemplaza. detalle() se conserva porque Movimientos, Kardex, Por Usuario,
+	// Salidas por Ubicacion y el Informe de Solicitudes reutilizan este drill-down para mostrar
+	// el documento completo de una salida (Fase 3 seccion 4: "reutilizar sin modificar").
 	function detalle(){
+		if (!Permiso::usuarioPuede('catalogo.ver')) {
+			flash('danger', 'No tiene permiso para ver este documento.');
+			echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
+			return;
+		}
+
 		$id = $_GET['id'];
 		$_SESSION['idSalida'] = $id;
 		$idUsuario = $_GET['usuario'];
@@ -41,49 +37,16 @@ if (isset($_SESSION['usuario'])) {
 		require_once('Views/Informes/DetalleSalida.php');
 	}
 
+	// Reabre el mismo documento (usa el id guardado por detalle()) despues de generar el PDF -
+	// ya no existe un show() al cual volver, porque el listado propio de este informe se elimino.
 	function generarPDF(){
 		echo "<script>window.open('Controllers/InformeSalidaMaterialPDF.php', '_blank')</script>";
-		unset($_SESSION['informeSalidaParcial']);
-		$this->show();
-	}
-
-	function generarSalidaPDF(){
-		echo "<script>window.open('Controllers/InformeSalidaPDF.php', '_blank')</script>";
-		//unset($_SESSION['informeEntradaParcial']);
-		$this->show();
-	}
-
-
-	function search(){
-		if (!empty($_POST['codigo'])) {
-			$codigo = $_POST['codigo'];
-			$material = InformeSalida::searchById($codigo);
-			if ($codigo =! $material->getId()) {
-				echo "<script>alert('¡ La salida buscado NO EXISTE !')</script>";
-			}else{
-
-				if (isset($_SESSION['informeSalidaParcial'])) {
-				$listaMaterial = [];
-				$listaMaterial = $_SESSION['informeSalidaParcial'];
-				}else{
-					$listaMaterial = [];
-				}
-				array_push ( $listaMaterial , $material );
-				$_SESSION['informeSalidaParcial'] = $listaMaterial;
-
-			}
-			
+		if (isset($_SESSION['idSalida'])) {
+			$registroSalidas = RegistroSalidas::searchSalida($_SESSION['idSalida']);
+			echo "<script>window.location.href = '?controller=InformeSalida&action=detalle&id=" . $_SESSION['idSalida'] . "&usuario=" . $registroSalidas->getUsuario() . "';</script>";
 		}
-		$this->show();
 	}
 
-	function eliminar(){
-		unset($_SESSION['informeSalidaParcial']);
-		$this->show();
-	}
-
-
-	
 	function error(){
 		require_once('Views/Material/error.php');
 	}

@@ -1,0 +1,812 @@
+[
+    {
+        "ID": 37,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 37,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 15:58:58",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-25\",\"Hora\":\"15:58:58\",\"Materiales\":1}"
+    },
+    {
+        "ID": 38,
+        "Entidad": "Ubicacion",
+        "EntidadID": 17,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:29:39",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":\"5\",\"Nombre\":\"M20\",\"Tipo\":\"manzana\"}"
+    },
+    {
+        "ID": 39,
+        "Entidad": "Ubicacion",
+        "EntidadID": 17,
+        "Accion": "ELIMINAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:29:53",
+        "DatosAntes": "{\"ProyectoID\":1,\"PadreID\":5,\"Nombre\":\"M20\",\"Tipo\":\"manzana\"}",
+        "DatosDespues": null
+    },
+    {
+        "ID": 40,
+        "Entidad": "Ubicacion",
+        "EntidadID": 18,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:30:06",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":\"5\",\"Nombre\":\"3\",\"Tipo\":\"casa\"}"
+    },
+    {
+        "ID": 41,
+        "Entidad": "Ubicacion",
+        "EntidadID": 19,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:30:33",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":null,\"Nombre\":\"2\",\"Tipo\":\"etapa\"}"
+    },
+    {
+        "ID": 42,
+        "Entidad": "Ubicacion",
+        "EntidadID": 19,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:30:48",
+        "DatosAntes": "{\"Nombre\":\"2\",\"Tipo\":\"etapa\"}",
+        "DatosDespues": "{\"Nombre\":\"etapa 2\",\"Tipo\":\"etapa\"}"
+    },
+    {
+        "ID": 43,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 38,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 16:42:24",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-25\",\"Hora\":\"16:42:24\",\"Materiales\":1}"
+    },
+    {
+        "ID": 75,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 19:15:30",
+        "DatosAntes": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}"
+    },
+    {
+        "ID": 99,
+        "Entidad": "Solicitud",
+        "EntidadID": 14,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 19:56:46",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"UbicacionID\":null,\"Materiales\":1}"
+    },
+    {
+        "ID": 100,
+        "Entidad": "Solicitud",
+        "EntidadID": 14,
+        "Accion": "APROBAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 19:57:06",
+        "DatosAntes": "{\"Estado\":\"PENDIENTE\"}",
+        "DatosDespues": "{\"Estado\":\"APROBADA\"}"
+    },
+    {
+        "ID": 101,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 46,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 19:57:26",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-25\",\"Hora\":\"19:57:26\",\"ContratistaID\":\"1\",\"ProyectoID\":1,\"Materiales\":1}"
+    },
+    {
+        "ID": 102,
+        "Entidad": "Solicitud",
+        "EntidadID": 14,
+        "Accion": "ENTREGAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 19:57:26",
+        "DatosAntes": "{\"Estado\":\"APROBADA\"}",
+        "DatosDespues": "{\"Estado\":\"ENTREGADA\",\"RegistroSalidasID\":\"46\"}"
+    },
+    {
+        "ID": 103,
+        "Entidad": "Solicitud",
+        "EntidadID": 15,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 20:05:52",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"2\",\"UbicacionID\":null,\"Materiales\":1}"
+    },
+    {
+        "ID": 107,
+        "Entidad": "Usuario",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 20:57:13",
+        "DatosAntes": "{\"Identificacion\":1004035010,\"Nombre\":\"Juan\",\"Apellido\":\"Lopez \",\"RolID\":1}",
+        "DatosDespues": "{\"Identificacion\":\"1004035010\",\"Nombre\":\"Juan\",\"Apellido\":\"Lopez \",\"RolID\":\"1\"}"
+    },
+    {
+        "ID": 108,
+        "Entidad": "Usuario",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 20:58:30",
+        "DatosAntes": "{\"Identificacion\":1004035010,\"Nombre\":\"Juan\",\"Apellido\":\"Lopez \",\"RolID\":1}",
+        "DatosDespues": "{\"Identificacion\":\"1004035010\",\"Nombre\":\"Juan Diego\",\"Apellido\":\"Lopez \",\"RolID\":\"1\"}"
+    },
+    {
+        "ID": 109,
+        "Entidad": "Solicitud",
+        "EntidadID": 15,
+        "Accion": "RECHAZAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 21:12:14",
+        "DatosAntes": "{\"Estado\":\"PENDIENTE\"}",
+        "DatosDespues": "{\"Estado\":\"RECHAZADA\"}"
+    },
+    {
+        "ID": 110,
+        "Entidad": "Material",
+        "EntidadID": 2,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 21:12:39",
+        "DatosAntes": "{\"Codigo\":69,\"Descripcion\":\"tubo liso de 6 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":219,\"Min_Almacen\":0,\"Max_Casa\":0}",
+        "DatosDespues": "{\"Codigo\":\"69\",\"Descripcion\":\"tubo liso de 6 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":\"219\",\"Min_Almacen\":\"5\",\"Max_Casa\":\"0\"}"
+    },
+    {
+        "ID": 111,
+        "Entidad": "Material",
+        "EntidadID": 3,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 21:12:45",
+        "DatosAntes": "{\"Codigo\":87,\"Descripcion\":\"union pvc de 2 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":81,\"Min_Almacen\":0,\"Max_Casa\":0}",
+        "DatosDespues": "{\"Codigo\":\"87\",\"Descripcion\":\"union pvc de 2 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":\"81\",\"Min_Almacen\":\"5\",\"Max_Casa\":\"0\"}"
+    },
+    {
+        "ID": 112,
+        "Entidad": "Material",
+        "EntidadID": 2,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 21:12:58",
+        "DatosAntes": "{\"Codigo\":69,\"Descripcion\":\"tubo liso de 6 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":219,\"Min_Almacen\":5,\"Max_Casa\":0}",
+        "DatosDespues": "{\"Codigo\":\"69\",\"Descripcion\":\"tubo liso de 6 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":\"219\",\"Min_Almacen\":\"1000\",\"Max_Casa\":\"0\"}"
+    },
+    {
+        "ID": 113,
+        "Entidad": "Material",
+        "EntidadID": 3,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-25 21:13:13",
+        "DatosAntes": "{\"Codigo\":87,\"Descripcion\":\"union pvc de 2 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":81,\"Min_Almacen\":5,\"Max_Casa\":0}",
+        "DatosDespues": "{\"Codigo\":\"87\",\"Descripcion\":\"union pvc de 2 sanitario\",\"Unidad\":\"Unidad\",\"Saldo\":\"81\",\"Min_Almacen\":\"500\",\"Max_Casa\":\"0\"}"
+    },
+    {
+        "ID": 185,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 58,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-26 18:57:14",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-26\",\"Hora\":\"18:57:14\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":18}]}"
+    },
+    {
+        "ID": 186,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 59,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-26 19:34:25",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-26\",\"Hora\":\"19:34:25\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":2,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6},{\"MaterialID\":22,\"Cantidad\":\"1\",\"UbicacionID\":6}]}"
+    },
+    {
+        "ID": 187,
+        "Entidad": "AjusteInventario",
+        "EntidadID": 23,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-26 19:35:30",
+        "DatosAntes": null,
+        "DatosDespues": "{\"MaterialID\":\"1\",\"Tipo\":\"PERDIDA\",\"CantidadAnterior\":6,\"CantidadNueva\":5,\"CantidadAjuste\":-1,\"Motivo\":\"Se mojo\",\"CostoUnitario\":\"41996.70\"}"
+    },
+    {
+        "ID": 188,
+        "Entidad": "AjusteInventario",
+        "EntidadID": 24,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-26 19:36:19",
+        "DatosAntes": null,
+        "DatosDespues": "{\"MaterialID\":\"1\",\"Tipo\":\"PERDIDA\",\"CantidadAnterior\":5,\"CantidadNueva\":4,\"CantidadAjuste\":-1,\"Motivo\":\"otro\",\"CostoUnitario\":\"41996.70\"}"
+    },
+    {
+        "ID": 195,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 62,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 09:35:16",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"09:35:16\",\"ContratistaID\":1,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 197,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 64,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 10:55:24",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"10:55:24\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":18}]}"
+    },
+    {
+        "ID": 198,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 65,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 10:57:03",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"10:57:03\",\"ContratistaID\":1,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 199,
+        "Entidad": "AjusteInventario",
+        "EntidadID": 25,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 10:57:51",
+        "DatosAntes": null,
+        "DatosDespues": "{\"MaterialID\":\"1\",\"Tipo\":\"CONTEO\",\"CantidadAnterior\":1,\"CantidadNueva\":2,\"CantidadAjuste\":1,\"Motivo\":\"hgefhefh\",\"CostoUnitario\":null}"
+    },
+    {
+        "ID": 200,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6615,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:05:37",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":null,\"Nombre\":\"urbanismo\",\"Tipo\":\"urbanismo\"}"
+    },
+    {
+        "ID": 201,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6617,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:10:09",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":\"4577\",\"Nombre\":\"Piso 1\",\"Tipo\":\"Piso\"}"
+    },
+    {
+        "ID": 202,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6618,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:10:29",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"PadreID\":\"6617\",\"Nombre\":\"101\",\"Tipo\":\"Apartamento\"}"
+    },
+    {
+        "ID": 203,
+        "Entidad": "TipoUbicacion",
+        "EntidadID": 13,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:30:30",
+        "DatosAntes": "{\"Descripcion\":\"Etapa\"}",
+        "DatosDespues": "{\"Descripcion\":\"Etapaaa\"}"
+    },
+    {
+        "ID": 204,
+        "Entidad": "TipoUbicacion",
+        "EntidadID": 13,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:35:34",
+        "DatosAntes": "{\"Descripcion\":\"Etapaaa\"}",
+        "DatosDespues": "{\"Descripcion\":\"Etapa\"}"
+    },
+    {
+        "ID": 205,
+        "Entidad": "Ubicacion",
+        "EntidadID": 4577,
+        "Accion": "DESACTIVAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:55:52",
+        "DatosAntes": "{\"Nombre\":\"Torre 1\",\"Activo\":1}",
+        "DatosDespues": "{\"Activo\":0}"
+    },
+    {
+        "ID": 206,
+        "Entidad": "Ubicacion",
+        "EntidadID": 4577,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:56:10",
+        "DatosAntes": "{\"Nombre\":\"Torre 1\",\"Tipo\":\"Torre\",\"PadreID\":null}",
+        "DatosDespues": "{\"Nombre\":\"Torre 1\",\"Tipo\":\"Torre\",\"PadreID\":null}"
+    },
+    {
+        "ID": 207,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6621,
+        "Accion": "GENERAR_MASIVO",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:57:47",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":1,\"PadreID\":null,\"ContenedorNuevo\":\"Torre 2\",\"Niveles\":[{\"tipo\":\"Piso\",\"cantidad\":25,\"patron\":\"Piso {N:02}\"},{\"tipo\":\"Apartamento\",\"cantidad\":6,\"patron\":\"Apto {N:02}\"}],\"TotalGenerado\":175}"
+    },
+    {
+        "ID": 208,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 66,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 11:59:27",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"11:59:27\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6648}]}"
+    },
+    {
+        "ID": 209,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 40,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:03:05",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:03:05\",\"Materiales\":1}"
+    },
+    {
+        "ID": 210,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 41,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:05:10",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:05:10\",\"Materiales\":2}"
+    },
+    {
+        "ID": 211,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 42,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:06:36",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:06:36\",\"Materiales\":2}"
+    },
+    {
+        "ID": 212,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 43,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:07:29",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:07:29\",\"Materiales\":2}"
+    },
+    {
+        "ID": 213,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 67,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:08:10",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:08:10\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"2\",\"UbicacionID\":6732}]}"
+    },
+    {
+        "ID": 214,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 68,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:10:06",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"12:10:06\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":2,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6647},{\"MaterialID\":1,\"Cantidad\":\"2\",\"UbicacionID\":6648}]}"
+    },
+    {
+        "ID": 215,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 12:14:09",
+        "DatosAntes": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"inventario.ajustar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"usuario.gestionar\",\"rol.gestionar\",\"auditoria.ver\",\"catalogo.ver\",\"catalogo.gestionar\",\"entrada.registrar\",\"salida.registrar\",\"costo.ver\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.aprobar.excepcional\",\"dashboard.ver\",\"inventario.ajustar\"]}"
+    },
+    {
+        "ID": 216,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 69,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 16:32:04",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"16:32:04\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6773}]}"
+    },
+    {
+        "ID": 217,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 70,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 17:13:26",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"17:13:26\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":2,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6719},{\"MaterialID\":22,\"Cantidad\":\"1\",\"UbicacionID\":6}]}"
+    },
+    {
+        "ID": 218,
+        "Entidad": "AjusteInventario",
+        "EntidadID": 26,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 17:14:36",
+        "DatosAntes": null,
+        "DatosDespues": "{\"MaterialID\":\"1\",\"Tipo\":\"DANO\",\"CantidadAnterior\":199,\"CantidadNueva\":198,\"CantidadAjuste\":-1,\"Motivo\":\"se mojo\",\"CostoUnitario\":\"44985.06\"}"
+    },
+    {
+        "ID": 219,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 71,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 17:16:54",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"17:16:54\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 220,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 72,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 18:12:20",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"18:12:20\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6755}]}"
+    },
+    {
+        "ID": 221,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 73,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 18:19:57",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"18:19:57\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6749}]}"
+    },
+    {
+        "ID": 222,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 74,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 18:37:32",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-27\",\"Hora\":\"18:37:32\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6761}]}"
+    },
+    {
+        "ID": 223,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6797,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 22:04:22",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"57\",\"PadreID\":null,\"Nombre\":\"Piso 1\",\"Tipo\":\"Piso\"}"
+    },
+    {
+        "ID": 224,
+        "Entidad": "Ubicacion",
+        "EntidadID": 6798,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-27 22:04:43",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"57\",\"PadreID\":\"6797\",\"Nombre\":\"Local 101\",\"Tipo\":\"Local\"}"
+    },
+    {
+        "ID": 225,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 44,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 14:27:08",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-28\",\"Hora\":\"14:27:08\",\"Materiales\":1}"
+    },
+    {
+        "ID": 227,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 46,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 16:50:44",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-28\",\"Hora\":\"16:50:44\",\"Materiales\":1}"
+    },
+    {
+        "ID": 228,
+        "Entidad": "AjusteInventario",
+        "EntidadID": 27,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 16:53:53",
+        "DatosAntes": null,
+        "DatosDespues": "{\"MaterialID\":\"1\",\"Tipo\":\"PERDIDA\",\"CantidadAnterior\":295,\"CantidadNueva\":245,\"CantidadAjuste\":-50,\"Motivo\":\"se mojo\",\"CostoUnitario\":\"45057.92\"}"
+    },
+    {
+        "ID": 229,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 75,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 17:03:17",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-28\",\"Hora\":\"17:03:17\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":2,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6749},{\"MaterialID\":22,\"Cantidad\":\"1\",\"UbicacionID\":6}]}"
+    },
+    {
+        "ID": 230,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 76,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 17:56:51",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-28\",\"Hora\":\"17:56:51\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6743}]}"
+    },
+    {
+        "ID": 231,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 19:25:47",
+        "DatosAntes": "{\"Permisos\":[\"usuario.gestionar\",\"rol.gestionar\",\"auditoria.ver\",\"catalogo.ver\",\"catalogo.gestionar\",\"entrada.registrar\",\"salida.registrar\",\"costo.ver\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.aprobar.excepcional\",\"dashboard.ver\",\"inventario.ajustar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"inventario.ajustar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}"
+    },
+    {
+        "ID": 232,
+        "Entidad": "Solicitud",
+        "EntidadID": 17,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 19:27:31",
+        "DatosAntes": null,
+        "DatosDespues": "{\"ProyectoID\":\"1\",\"UbicacionID\":null,\"Materiales\":1}"
+    },
+    {
+        "ID": 233,
+        "Entidad": "Solicitud",
+        "EntidadID": 17,
+        "Accion": "APROBAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 19:28:00",
+        "DatosAntes": "{\"Estado\":\"PENDIENTE\"}",
+        "DatosDespues": "{\"Estado\":\"APROBADA\"}"
+    },
+    {
+        "ID": 234,
+        "Entidad": "RolPermiso",
+        "EntidadID": 2,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 19:41:35",
+        "DatosAntes": "{\"Permisos\":[\"catalogo.ver\",\"entrada.registrar\",\"salida.registrar\",\"solicitud.ver\",\"solicitud.entregar\",\"dashboard.ver\",\"inventario.ajustar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"catalogo.ver\",\"entrada.registrar\",\"salida.registrar\",\"solicitud.entregar\",\"dashboard.ver\",\"inventario.ajustar\"]}"
+    },
+    {
+        "ID": 235,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-28 19:41:51",
+        "DatosAntes": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"inventario.ajustar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"usuario.gestionar\",\"rol.gestionar\",\"auditoria.ver\",\"catalogo.ver\",\"catalogo.gestionar\",\"entrada.registrar\",\"salida.registrar\",\"costo.ver\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.aprobar.excepcional\",\"dashboard.ver\",\"inventario.ajustar\"]}"
+    },
+    {
+        "ID": 239,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 09:52:28",
+        "DatosAntes": "{\"Permisos\":[\"usuario.gestionar\",\"rol.gestionar\",\"auditoria.ver\",\"catalogo.ver\",\"catalogo.gestionar\",\"entrada.registrar\",\"salida.registrar\",\"costo.ver\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.aprobar.excepcional\",\"dashboard.ver\",\"inventario.ajustar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"inventario.ajustar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}"
+    },
+    {
+        "ID": 240,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 77,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 10:01:43",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"10:01:43\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"2\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 241,
+        "Entidad": "Usuario",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 10:02:57",
+        "DatosAntes": "{\"Identificacion\":1004035010,\"Nombre\":\"Juan Diego\",\"Apellido\":\"Lopez \",\"RolID\":1}",
+        "DatosDespues": "{\"Identificacion\":\"1004035010\",\"Nombre\":\"Juan Diego\",\"Apellido\":\"Lopez \",\"RolID\":\"1\"}"
+    },
+    {
+        "ID": 242,
+        "Entidad": "RolPermiso",
+        "EntidadID": 1,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 10:42:58",
+        "DatosAntes": "{\"Permisos\":[\"auditoria.ver\",\"catalogo.gestionar\",\"catalogo.ver\",\"costo.ver\",\"dashboard.ver\",\"entrada.registrar\",\"inventario.ajustar\",\"rol.gestionar\",\"salida.registrar\",\"solicitud.aprobar.excepcional\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.ver\",\"usuario.gestionar\"]}",
+        "DatosDespues": "{\"Permisos\":[\"usuario.gestionar\",\"rol.gestionar\",\"auditoria.ver\",\"catalogo.ver\",\"catalogo.gestionar\",\"entrada.registrar\",\"salida.registrar\",\"costo.ver\",\"solicitud.crear\",\"solicitud.entregar\",\"solicitud.aprobar.excepcional\",\"dashboard.ver\",\"inventario.ajustar\"]}"
+    },
+    {
+        "ID": 247,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 78,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 16:16:52",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"16:16:52\",\"ContratistaID\":2,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"240\",\"UbicacionID\":6755}]}"
+    },
+    {
+        "ID": 248,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 79,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 16:22:26",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"16:22:26\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 249,
+        "Entidad": "RegistroEntradas",
+        "EntidadID": 47,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 16:35:27",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"16:35:27\",\"Materiales\":1}"
+    },
+    {
+        "ID": 250,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 80,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 16:36:03",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"16:36:03\",\"ContratistaID\":2,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6755}]}"
+    },
+    {
+        "ID": 251,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 81,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 16:45:58",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"16:45:58\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 252,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 82,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 17:38:59",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"17:38:59\",\"ContratistaID\":1,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6615}]}"
+    },
+    {
+        "ID": 253,
+        "Entidad": "NotificacionDestinatario",
+        "EntidadID": 2,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 17:41:47",
+        "DatosAntes": "{\"Nombre\":\"Administraci\u00f3n\",\"Correo\":\"diegolopez1797@gmail.com\"}",
+        "DatosDespues": "{\"Nombre\":\"Administraci\u00f3n\",\"Correo\":\"samuelgutierrezlopez56@gmail.com\"}"
+    },
+    {
+        "ID": 254,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 83,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 17:42:10",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"17:42:10\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 255,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 84,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 18:45:07",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"18:45:07\",\"ContratistaID\":2,\"ProyectoID\":1,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6755}]}"
+    },
+    {
+        "ID": 256,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 85,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-08-31 18:47:33",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-08-31\",\"Hora\":\"18:47:33\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 257,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 86,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-09-01 08:20:40",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-09-01\",\"Hora\":\"08:20:40\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 258,
+        "Entidad": "NotificacionDestinatario",
+        "EntidadID": 2,
+        "Accion": "EDITAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-09-01 08:21:17",
+        "DatosAntes": "{\"Nombre\":\"Administraci\u00f3n\",\"Correo\":\"samuelgutierrezlopez56@gmail.com\"}",
+        "DatosDespues": "{\"Nombre\":\"Administraci\u00f3n\",\"Correo\":\"diegolopez1797@gmail.com\"}"
+    },
+    {
+        "ID": 259,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 87,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-09-01 08:21:38",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-09-01\",\"Hora\":\"08:21:38\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    },
+    {
+        "ID": 260,
+        "Entidad": "RegistroSalidas",
+        "EntidadID": 88,
+        "Accion": "CREAR",
+        "UsuarioID": 1,
+        "Fecha": "2026-09-01 08:21:57",
+        "DatosAntes": null,
+        "DatosDespues": "{\"Fecha\":\"2026-09-01\",\"Hora\":\"08:21:57\",\"ContratistaID\":2,\"ProyectoID\":2,\"Materiales\":1,\"Lineas\":[{\"MaterialID\":1,\"Cantidad\":\"1\",\"UbicacionID\":6611}]}"
+    }
+]

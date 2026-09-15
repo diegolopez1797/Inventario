@@ -29,9 +29,9 @@
 					<?php foreach ($listaContratista as $contratista) {?>
 					<tr>
 						<td><?php echo $contratista->getId(); ?></td>
-						<td><?php echo $contratista->getDescripcion(); ?></td>
+						<td><?php echo h($contratista->getDescripcion()); ?></td>
 						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Contratista&&action=updateshow&&id=<?php echo $contratista->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Contratista&&action=delete&&id=<?php echo $contratista->getId(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Contratista&&action=delete&&id=<?php echo $contratista->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

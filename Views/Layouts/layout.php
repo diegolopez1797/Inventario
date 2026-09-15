@@ -1,6 +1,8 @@
 <?php
 
 require_once('connection.php');
+require_once('Csrf.php');
+require_once('Html.php');
 require_once('Model/Usuario.php');
 require_once('Model/MaterialRegistroEntradas.php');
 require_once('Model/Material.php');
@@ -13,21 +15,24 @@ require_once('Model/Destino.php');
 require_once('Model/Proyecto.php');
 require_once('Model/Rol.php');
 require_once('Model/MaterialRegistroSalidas.php');
-require_once('Model/InformeGeneral.php');
-require_once('Model/InformeEntrada.php');
-require_once('Model/InformeSalida.php');
 require_once('Model/InformeDetallado.php');
 require_once('Model/InformeMaterialEntrada.php');
 require_once('Model/InformeMaterialSalida.php');
 require_once('Model/RegistroEntradas.php');
 require_once('Model/RegistroSalidas.php');
-require_once('Model/InformeEntradaPorFecha.php');
-require_once('Model/InformeEntradaPorMaterialFecha.php');
-require_once('Model/InformeEntradaPorFecha.php');
-require_once('Model/InformeSalidaPorFecha.php');
-require_once('Model/InformeEntradaPorMaterialFecha.php');
-require_once('Model/InformeSalidaPorMaterialFecha.php');
-require_once('Model/InformeMaterialPorExistencia.php');
+require_once('Model/Auditoria.php');
+require_once('Model/Ubicacion.php');
+require_once('Model/TipoUbicacion.php');
+require_once('Model/Proveedor.php');
+require_once('Model/Almacen.php');
+require_once('Model/Dashboard.php');
+require_once('Model/Kardex.php');
+require_once('Model/InformePorUsuario.php');
+require_once('Model/Permiso.php');
+require_once('Model/Solicitud.php');
+require_once('Model/AjusteInventario.php');
+require_once('Model/Movimientos.php');
+require_once('Model/NotificacionDestinatario.php');
 require('PHPMailer/Exception.php');
 require('PHPMailer/PHPMailer.php');
 require('PHPMailer/SMTP.php');
@@ -73,10 +78,11 @@ session_start();
 		<?php
 			if (isset($_SESSION['usuario'])) {
 		 		require_once('cabeceraNueva.php');
-		 	} 
+		 	}
 		?>
-		
+
 	</header>
+	<?php flash_render(); ?>
 	<section>
 		<?php require_once('routing.php'); ?>
 	</section>

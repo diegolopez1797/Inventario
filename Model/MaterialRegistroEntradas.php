@@ -9,15 +9,17 @@ class MaterialRegistroEntradas
 	private $RegistroEntradasId;
 	private $Cantidad;
 	private $Destino;
+	private $CostoUnitario;
 
-	
-	function __construct($Id, $MaterialId, $RegistroEntradasId, $Cantidad, $Destino)
+
+	function __construct($Id, $MaterialId, $RegistroEntradasId, $Cantidad, $Destino, $CostoUnitario = null)
 	{
 		$this->setID($Id);
 		$this->setMaterialId($MaterialId);
 		$this->setRegistroEntradasId($RegistroEntradasId);
-		$this->setCantidad($Cantidad);	
+		$this->setCantidad($Cantidad);
 		$this->setDestino($Destino);
+		$this->setCostoUnitario($CostoUnitario);
 	}
 
 	public function getId(){
@@ -60,17 +62,24 @@ class MaterialRegistroEntradas
 		$this->Destino = $Destino;
 	}
 
+	public function getCostoUnitario(){
+		return $this->CostoUnitario;
+	}
 
+	public function setCostoUnitario($CostoUnitario){
+		$this->CostoUnitario = $CostoUnitario;
+	}
 
 	public static function save($materialRegistroEntradas){
 		$db=Db::getConnect();
-		
-		$insert=$db->prepare('INSERT INTO material_registro_entradas VALUES (null,:materialId,:registroEntradasId,:Cantidad,:Destino)');
+
+		$insert=$db->prepare('INSERT INTO material_registro_entradas VALUES (null,:materialId,:registroEntradasId,:Cantidad,:Destino,:Costo)');
 
 		$insert->bindValue('materialId',$materialRegistroEntradas->getMaterialId());
 		$insert->bindValue('registroEntradasId',$materialRegistroEntradas->getRegistroEntradasId());
 		$insert->bindValue('Cantidad',$materialRegistroEntradas->getCantidad());
 		$insert->bindValue('Destino',$materialRegistroEntradas->getDestino());
+		$insert->bindValue('Costo',$materialRegistroEntradas->getCostoUnitario(), $materialRegistroEntradas->getCostoUnitario() === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
 		$insert->execute();
 
 		return $insert;
@@ -86,10 +95,10 @@ class MaterialRegistroEntradas
 		$select->execute();
 
 		foreach($select->fetchAll() as $entrada){
-			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad'],$entrada['Destino']);
+			$materialRegistroEntradas[] = new MaterialRegistroEntradas($entrada['ID'],$entrada['MaterialID'],$entrada['Registro_EntradasID'],$entrada['Cantidad'],$entrada['Destino'],$entrada['CostoUnitario']);
 
 		}
-		
+
 		return $materialRegistroEntradas;
 
 	}

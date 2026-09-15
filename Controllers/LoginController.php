@@ -20,22 +20,31 @@ class LoginController{
 		$identificacion = $_POST['identificacion'];
 		$clave = $_POST['clave'];
 
-		$usuarioLogeado = Usuario::verificarUsuario($identificacion, $clave);
+		try {
+			$usuarioLogeado = Usuario::verificarUsuario($identificacion, $clave);
+		} catch (Throwable $e) {
+			// Cualquier error durante la validacion de la contraseña se trata como
+			// credenciales invalidas: nunca debe propagarse un error que muestre la
+			// contraseña ingresada (argumento de la llamada) en un stack trace.
+			$usuarioLogeado = false;
+		}
 
 		if ($usuarioLogeado == false) {
-			echo "<script>alert('¡ Identificacion o Contraseña INCORRECTA !')</script>";
+			flash_now('danger', 'Identificación o contraseña incorrecta.');
 			$this->show();
 		} else {
 			$usuario = Usuario::searchByIdUser($identificacion);
 			$this->entrar($usuario);
-			
+
 		}
-		
+
 	}
 
 	function entrar($usuario){
+		session_regenerate_id(true);
 		$_SESSION['usuario'] = $usuario;
-		echo "<script>window.location.href = '?controller=Material&action=index';</script>";
+		flash('success', 'Bienvenido: ' . $usuario->getNombre() . ' ' . $usuario->getApellido());
+		echo "<script>window.location.href = '?controller=Dashboard&action=show';</script>";
 	}
 
 	function salir(){

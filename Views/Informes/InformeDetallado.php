@@ -1,90 +1,130 @@
+<?php
+$construirEnlace = function($cambios = []) use ($proyectoId, $ubicacionId, $materialId, $rubroId, $fechaInicial, $fechaFinal) {
+	$parametros = array_merge([
+		'controller' => 'InformeDetallado',
+		'action' => 'show',
+		'proyectoId' => $proyectoId,
+		'ubicacionId' => $ubicacionId,
+		'materialId' => $materialId,
+		'rubroId' => $rubroId,
+		'fechaInicial' => $fechaInicial,
+		'fechaFinal' => $fechaFinal,
+	], $cambios);
+
+	$parametros = array_filter($parametros, function($valor){
+		return $valor !== '' && $valor !== null;
+	});
+
+	return '?' . http_build_query($parametros);
+};
+?>
 <div class="container">
-	<h2>Informe Salida / Por material y proyecto</h2>
-	<form class="form-inline" action="?controller=InformeDetallado&action=searchDescripcion" method="post">
+	<h2>Salidas por Ubicación</h2>
 
+	<form class="form-inline" action="?controller=InformeDetallado&action=show" method="get">
+		<input type="hidden" name="controller" value="InformeDetallado">
+		<input type="hidden" name="action" value="show">
 		<div class="form-group row">
 			<div class="col-xs-4">
-	      		<select name="idMaterial" id="idMaterial" class="selectpicker" data-show-subtext="true" data-live-search="true">
-				<?php foreach ($listaMaterialCompleta as $material) { ?>
-				<option value="<?php echo $material->getId(); ?>" data-subtext="<?php echo $material->getDescripcion(); ?>"><?php echo $material->getCodigo()." - "; ?></option>
-				<?php }?>          
+				<select name="proyectoId" class="selectpicker" data-show-subtext="true" data-live-search="true">
+					<option value="">Elija un proyecto...</option>
+					<?php foreach ($listaProyectoCompleta as $proyecto) { ?>
+					<option value="<?php echo $proyecto->getId(); ?>" <?php echo (string) $proyectoId === (string) $proyecto->getId() ? 'selected' : ''; ?>><?php echo h($proyecto->getDescripcion()); ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
-
+		<?php if (!empty($proyectoId)) { ?>
 		<div class="form-group row">
 			<div class="col-xs-4">
-	      		<select name="idProyecto" id="idProyecto" class="selectpicker" data-show-subtext="true" data-live-search="true">
-				<?php foreach ($listaProyectoCompleta as $proyecto) { ?>
-				<option value="<?php echo $proyecto->getId(); ?>" data-subtext="<?php echo $proyecto->getDescripcion(); ?>"><?php echo $proyecto->getId()." - "; ?></option>
-				<?php }?>          
+				<select name="ubicacionId" class="selectpicker" data-show-subtext="false" data-live-search="true">
+					<option value="">Todas las ubicaciones del proyecto</option>
+					<?php foreach ($listaUbicacionProyecto as $ubicacion) { ?>
+					<option value="<?php echo $ubicacion['id']; ?>" <?php echo (string) $ubicacionId === (string) $ubicacion['id'] ? 'selected' : ''; ?>><?php echo h($ubicacion['ruta']); ?></option>
+					<?php } ?>
 				</select>
 			</div>
 		</div>
-
 		<div class="form-group row">
 			<div class="col-xs-4">
-				<input type="number" class="form-control" id="cantidad" name="cantidad" type="text" placeholder="Cant. Max. por casa">
+				<select name="materialId" class="selectpicker" data-show-subtext="true" data-live-search="true">
+					<option value="">Todos los materiales</option>
+					<?php foreach ($listaMaterialCompleta as $material) { ?>
+					<option value="<?php echo $material->getId(); ?>" data-subtext="<?php echo h($material->getDescripcion()); ?>" <?php echo (string) $materialId === (string) $material->getId() ? 'selected' : ''; ?>><?php echo $material->getCodigo()." - "; ?></option>
+					<?php } ?>
+				</select>
 			</div>
 		</div>
-
 		<div class="form-group row">
 			<div class="col-xs-4">
-				<button type="submit" name="btnConsultar" class="btn btn-success"><span class="glyphicon glyphicon-folder-open"> </span> Consultar</button>
+				<select name="rubroId" class="form-control">
+					<option value="">Toda actividad</option>
+					<?php foreach ($listaRubro as $rubro) { ?>
+					<option value="<?php echo $rubro->getId(); ?>" <?php echo (string) $rubroId === (string) $rubro->getId() ? 'selected' : ''; ?>><?php echo h($rubro->getDescripcion()); ?></option>
+					<?php } ?>
+				</select>
 			</div>
 		</div>
+		<div class="form-group row">
+			<div class="col-xs-4">
+				<input type="date" name="fechaInicial" class="form-control" value="<?php echo h($fechaInicial); ?>" placeholder="Desde">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-4">
+				<input type="date" name="fechaFinal" class="form-control" value="<?php echo h($fechaFinal); ?>" placeholder="Hasta">
+			</div>
+		</div>
+		<?php } ?>
+		<div class="form-group row">
+			<div class="col-xs-4">
+				<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"> </span> Consultar</button>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-4">
+				<a class="btn btn-default" href="?controller=InformeDetallado&action=show">Limpiar filtros</a>
+			</div>
+		</div>
+		<?php if (!empty($proyectoId)) { ?>
+		<div class="form-group row">
+			<div class="col-xs-4">
+				<a class="btn btn-success" href="?controller=InformeDetallado&action=generarPDF"><span class="glyphicon glyphicon-file"> </span> Generar PDF</a>
+			</div>
+		</div>
+		<?php } ?>
 	</form>
 
+	<?php if (empty($proyectoId)) { ?>
+		<div class="alert alert-info">Elija un proyecto para consultar sus salidas por ubicación.</div>
+	<?php } elseif (empty($grupos)) { ?>
+		<div class="alert alert-info">No se encontraron salidas con los filtros aplicados.</div>
+	<?php } else { ?>
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>Descripcion Material</th>
-					<th>Proyecto</th>
-					<th>Manzana</th>
-					<th>Casa</th>
-					<th>Cantidad</th>
-					<th>Acciones</th>
-
+					<th>Ubicación</th>
+					<th>Material</th>
+					<th>Unidad</th>
+					<th>Cantidad total</th>
+					<th>No. de documentos</th>
+					<th>Ver</th>
 				</tr>
 				<tbody>
-
-					<?php if (!empty($_SESSION['informeDetallado'])) { ?>
-
-
-
-						<?php foreach ($_SESSION['informeDetallado'] as $informe) {
-
-						$material = Material::searchById($informe->getMaterialId());
-						$manzana = Manzana::searchById($informe->getManzanaId());
-						$casa = Casa::searchById($informe->getCasaId());
-						$proyecto = Proyecto::searchById($informe->getProyectoId());
-
-
-					?>
+					<?php foreach ($grupos as $grupo) { ?>
 					<tr>
-						<td><?php echo $material->getDescripcion(); ?></td>
-						<td><?php echo $proyecto->getDescripcion(); ?></td>
-						<td><?php echo $manzana->getDescripcion(); ?></td>
-						<td><?php echo $casa->getDescripcion(); ?></td>
-						<td><?php echo $informe->getCantidad(); ?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=InformeDetallado&action=detalladoMaterial&proyecto=<?php echo $informe->getProyectoId()?>&manzana=<?php echo $informe->getManzanaId()?>&casa=<?php echo $informe->getCasaId()?>&material=<?php echo $informe->getMaterialId()?>"><span class="glyphicon glyphicon-eye-open"> </span> Detalle</a></td>
+						<td><?php echo h($grupo['UbicacionRuta']); ?></td>
+						<td><?php echo h($grupo['MaterialCodigo']); ?> - <?php echo h($grupo['MaterialDescripcion']); ?></td>
+						<td><?php echo !empty($grupo['MaterialUnidad']) ? h($grupo['MaterialUnidad']) : ''; ?></td>
+						<td><?php echo (int) $grupo['CantidadTotal']; ?></td>
+						<td><?php echo (int) $grupo['TotalDocumentos']; ?></td>
+						<td><a class="btn btn-warning btn-xs" href="?controller=InformeDetallado&action=detalle&proyecto=<?php echo $proyectoId; ?>&ubicacion=<?php echo $grupo['UbicacionID']; ?>&material=<?php echo $grupo['MaterialID']; ?>"><span class="glyphicon glyphicon-eye-open"> </span> Detalle</a></td>
 					</tr>
 					<?php } ?>
-
-						
-					
-					<?php }else{ ?>
-
-						<?php //echo "<script>alert('¡ No hay resultados !')</script>"; ?>
-
-
-					<?php } ?>
-
-					
 				</tbody>
 			</thead>
 		</table>
 	</div>
-	
+	<?php } ?>
 </div>
