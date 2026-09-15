@@ -33,6 +33,7 @@ require_once('Model/Solicitud.php');
 require_once('Model/AjusteInventario.php');
 require_once('Model/Movimientos.php');
 require_once('Model/NotificacionDestinatario.php');
+require_once('Model/Configuracion.php');
 require('PHPMailer/Exception.php');
 require('PHPMailer/PHPMailer.php');
 require('PHPMailer/SMTP.php');

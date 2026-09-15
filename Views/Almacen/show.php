@@ -18,8 +18,8 @@
 						<td><?php echo $almacen->getId(); ?></td>
 						<td><?php echo h($almacen->getDescripcion()); ?></td>
 						<td><?php echo h($almacen->getTipo()); ?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Almacen&&action=updateshow&&id=<?php echo $almacen->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Almacen&&action=delete&&id=<?php echo $almacen->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Almacen&&action=updateshow&&id=<?php echo $almacen->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Almacen&&action=delete&&id=<?php echo $almacen->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

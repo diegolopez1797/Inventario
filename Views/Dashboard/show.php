@@ -3,10 +3,10 @@
 
 	<div class="form-group row" style="margin-bottom: 20px;">
 		<div class="col-xs-4" style="display:inline-block; margin-right:10px;">
-			<a class="btn btn-success btn-lg" href="?controller=RegistroEntradas&action=show"><span class="glyphicon glyphicon-plus-sign"> </span> Registrar Entrada</a>
+			<a class="btn btn-success" href="?controller=RegistroEntradas&action=show"><span class="glyphicon glyphicon-plus-sign"> </span> Registrar Entrada</a>
 		</div>
 		<div class="col-xs-4" style="display:inline-block;">
-			<a class="btn btn-primary btn-lg" href="?controller=RegistroSalidas&action=show"><span class="glyphicon glyphicon-minus-sign"> </span> Registrar Salida</a>
+			<a class="btn btn-primary" href="?controller=RegistroSalidas&action=show"><span class="glyphicon glyphicon-minus-sign"> </span> Registrar Salida</a>
 		</div>
 	</div>
 
@@ -16,6 +16,7 @@
 			<?php if (empty($materialesCriticos)) { ?>
 				<p><em>Ningún material está en o por debajo de su mínimo de almacén.</em></p>
 			<?php } else { ?>
+				<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>
 						<tr><th>Descripción</th><th>Saldo</th><th>Mínimo</th></tr>
@@ -30,6 +31,7 @@
 						<?php } ?>
 					</tbody>
 				</table>
+				</div>
 			<?php } ?>
 		</div>
 
@@ -38,6 +40,7 @@
 			<?php if (empty($movimientosRecientes)) { ?>
 				<p><em>Todavía no hay movimientos registrados.</em></p>
 			<?php } else { ?>
+				<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>
 						<tr><th></th><th>Fecha</th><th>Usuario</th><th>Líneas</th></tr>
@@ -56,6 +59,7 @@
 						<?php } ?>
 					</tbody>
 				</table>
+				</div>
 			<?php } ?>
 		</div>
 	</div>

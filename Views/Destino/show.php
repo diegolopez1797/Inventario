@@ -30,8 +30,8 @@
 					<tr>
 						<td><?php echo $destino->getId(); ?></td>
 						<td><?php echo h($destino->getDescripcion()); ?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Destino&&action=updateshow&&id=<?php echo $destino->getId(); ?>">Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Destino&&action=delete&&id=<?php echo $destino->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>">Eliminar</a></td>
+						<td><a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Destino&&action=updateshow&&id=<?php echo $destino->getId(); ?>">Editar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Destino&&action=delete&&id=<?php echo $destino->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>">Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

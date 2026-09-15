@@ -30,13 +30,14 @@ $controllers=array(
 	'Solicitud'=>['register','save','show','searchMaterial','quitarMaterial','aprobar','rechazar','mostrarEntrega','procesarEntrega','reporte'],
 	'AjusteInventario'=>['show','register','save'],
 	'Movimientos'=>['show','generarPDF'],
-	'NotificacionDestinatario'=>['show','register','save','updateshow','update','activar','desactivar']
+	'NotificacionDestinatario'=>['show','register','save','updateshow','update','activar','desactivar'],
+	'Configuracion'=>['show','guardarLogo']
 );
 
 // Acciones que mutan datos o sesion de autenticacion: exigen token CSRF valido.
 // El nombre de accion es consistente entre controllers (save/update/delete/...),
 // por eso la validacion se centraliza aqui en vez de repetirla en cada Controller.
-$accionesMutantes = ['save', 'update', 'delete', 'searchMaterial', 'quitarMaterial', 'verificar', 'guardarPermisos', 'aprobar', 'rechazar', 'procesarEntrega', 'desactivar', 'generarMasivoConfirmar', 'activar'];
+$accionesMutantes = ['save', 'update', 'delete', 'searchMaterial', 'quitarMaterial', 'verificar', 'guardarPermisos', 'aprobar', 'rechazar', 'procesarEntrega', 'desactivar', 'generarMasivoConfirmar', 'activar', 'guardarLogo'];
 
 if (array_key_exists($controller,  $controllers)) {
 	if (in_array($action, $controllers[$controller])) {
@@ -158,6 +159,10 @@ function call($controller, $action){
 		case 'NotificacionDestinatario';
 		require_once('Model/NotificacionDestinatario.php');
 		$controller = new NotificacionDestinatarioController();
+		break;
+		case 'Configuracion';
+		require_once('Model/Configuracion.php');
+		$controller = new ConfiguracionController();
 		break;
 		default:
 				# code...

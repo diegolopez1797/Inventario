@@ -18,8 +18,8 @@
 						<td><?php echo h($tipo->getCodigo()); ?></td>
 						<td><?php echo h($tipo->getDescripcion()); ?></td>
 						<td>
-							<a class="btn btn-warning" href="?controller=TipoUbicacion&&action=updateshow&&id=<?php echo $tipo->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a>
-							<a class="btn btn-danger" href="?controller=TipoUbicacion&&action=desactivar&&id=<?php echo $tipo->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>" onclick="return confirm('¿Desactivar este tipo? Dejará de sugerirse en formularios nuevos.');"><span class="glyphicon glyphicon-trash"> </span> Desactivar</a>
+							<a class="btn btn-warning btn-xs" href="?controller=TipoUbicacion&&action=updateshow&&id=<?php echo $tipo->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a>
+							<a class="btn btn-danger btn-xs" href="?controller=TipoUbicacion&&action=desactivar&&id=<?php echo $tipo->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>" onclick="return confirm('¿Desactivar este tipo? Dejará de sugerirse en formularios nuevos.');"><span class="glyphicon glyphicon-trash"> </span> Desactivar</a>
 						</td>
 					</tr>
 					<?php } ?>

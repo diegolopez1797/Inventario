@@ -280,6 +280,7 @@
 			});
 			</script>
 
+			<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -385,7 +386,7 @@
 										<input type="hidden" name="listaSeleccionArea[<?php echo $i ?>]" value="0">
 									</div>
 								</td>
-								<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=RegistroSalidas&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Borrar</a></td>
+								<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=RegistroSalidas&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Borrar</a></td>
 							</tr>
 							<?php $i = $i + 1; ?>
 							<?php } ?>
@@ -395,6 +396,7 @@
 					</tbody>
 				</thead>
 			</table>
+			</div>
 
 		<?php } ?>
 

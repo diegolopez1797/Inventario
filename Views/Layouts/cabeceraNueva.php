@@ -7,7 +7,7 @@
     </a> <!-- / #logo-header -->
 
     <a href="?controller=Dashboard&action=show" id="logo-header">
-        <img src="/Berdez/fpdf/tutorial/logo.png" alt="Constructora Berdez">
+        <img src="<?php echo h(Configuracion::logoUrl()); ?>" alt="Constructora Berdez">
     </a>
 
     <nav class="menuCSS3">
@@ -63,6 +63,9 @@
                 <?php } ?>
                 <?php if (Permiso::usuarioPuede('auditoria.ver')) { ?>
                 <li><a href="?controller=Auditoria&action=show">Auditoria</a></li>
+                <?php } ?>
+                <?php if (Permiso::usuarioPuede('configuracion.gestionar')) { ?>
+                <li><a href="?controller=Configuracion&action=show">Configuración</a></li>
                 <?php } ?>
             </ul>
     </nav>

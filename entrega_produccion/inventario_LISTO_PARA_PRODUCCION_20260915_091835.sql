@@ -123,7 +123,7 @@ CREATE TABLE `auditoria` (
   KEY `idx_entidad` (`Entidad`,`EntidadID`),
   KEY `UsuarioID` (`UsuarioID`),
   CONSTRAINT `auditoria_usuario_fk` FOREIGN KEY (`UsuarioID`) REFERENCES `usuario` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,6 +157,30 @@ LOCK TABLES `casa` WRITE;
 /*!40000 ALTER TABLE `casa` DISABLE KEYS */;
 INSERT INTO `casa` VALUES (1,'1');
 /*!40000 ALTER TABLE `casa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `configuracion`
+--
+
+DROP TABLE IF EXISTS `configuracion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `configuracion` (
+  `ID` int(11) NOT NULL,
+  `LogoPath` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `configuracion`
+--
+
+LOCK TABLES `configuracion` WRITE;
+/*!40000 ALTER TABLE `configuracion` DISABLE KEYS */;
+INSERT INTO `configuracion` VALUES (1,NULL);
+/*!40000 ALTER TABLE `configuracion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -412,7 +436,7 @@ CREATE TABLE `permiso` (
   `Descripcion` varchar(150) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `uq_codigo` (`Codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -421,7 +445,7 @@ CREATE TABLE `permiso` (
 
 LOCK TABLES `permiso` WRITE;
 /*!40000 ALTER TABLE `permiso` DISABLE KEYS */;
-INSERT INTO `permiso` VALUES (1,'usuario.gestionar','Crear, editar, eliminar y ver usuarios'),(2,'rol.gestionar','Crear y editar roles y su matriz de permisos'),(3,'auditoria.ver','Ver el registro de auditoria'),(4,'catalogo.ver','Listar y buscar en catalogos maestros'),(5,'catalogo.gestionar','Crear, editar y eliminar en catalogos maestros'),(6,'entrada.registrar','Registrar entradas de material'),(7,'salida.registrar','Registrar salidas de material'),(8,'costo.ver','Ver costo promedio y costo unitario en vistas'),(9,'solicitud.crear','Crear una solicitud de material'),(10,'solicitud.ver','Ver solicitudes'),(11,'solicitud.entregar','Ejecutar la entrega de una solicitud aprobada'),(12,'solicitud.aprobar.excepcional','Aprobar cualquier solicitud sin ser el responsable del proyecto'),(13,'dashboard.ver','Ver el dashboard, kardex e informe por usuario'),(14,'inventario.ajustar','Registrar ajustes de inventario (apertura, conteo, pérdida, daño)'),(15,'notificacion.gestionar','Administrar destinatarios de alertas de inventario');
+INSERT INTO `permiso` VALUES (1,'usuario.gestionar','Crear, editar, eliminar y ver usuarios'),(2,'rol.gestionar','Crear y editar roles y su matriz de permisos'),(3,'auditoria.ver','Ver el registro de auditoria'),(4,'catalogo.ver','Listar y buscar en catalogos maestros'),(5,'catalogo.gestionar','Crear, editar y eliminar en catalogos maestros'),(6,'entrada.registrar','Registrar entradas de material'),(7,'salida.registrar','Registrar salidas de material'),(8,'costo.ver','Ver costo promedio y costo unitario en vistas'),(9,'solicitud.crear','Crear una solicitud de material'),(10,'solicitud.ver','Ver solicitudes'),(11,'solicitud.entregar','Ejecutar la entrega de una solicitud aprobada'),(12,'solicitud.aprobar.excepcional','Aprobar cualquier solicitud sin ser el responsable del proyecto'),(13,'dashboard.ver','Ver el dashboard, kardex e informe por usuario'),(14,'inventario.ajustar','Registrar ajustes de inventario (apertura, conteo, pérdida, daño)'),(15,'notificacion.gestionar','Administrar destinatarios de alertas de inventario'),(16,'configuracion.gestionar','Administrar la configuracion general del sistema (logo)');
 /*!40000 ALTER TABLE `permiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -587,7 +611,7 @@ CREATE TABLE `rol_permiso` (
 
 LOCK TABLES `rol_permiso` WRITE;
 /*!40000 ALTER TABLE `rol_permiso` DISABLE KEYS */;
-INSERT INTO `rol_permiso` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,11),(1,12),(1,13),(1,14),(1,15),(2,4),(2,5),(2,6),(2,7),(2,11),(2,13),(2,14),(3,4),(3,9),(3,10),(3,13),(4,4),(4,8),(4,10),(4,13),(5,4),(5,8),(5,10),(5,13),(6,4),(6,10),(6,13);
+INSERT INTO `rol_permiso` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(2,4),(2,5),(2,6),(2,7),(2,11),(2,13),(2,14),(3,4),(3,9),(3,10),(3,13),(4,4),(4,8),(4,10),(4,13),(5,4),(5,8),(5,10),(5,13),(6,4),(6,10),(6,13);
 /*!40000 ALTER TABLE `rol_permiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -792,4 +816,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-09-13 17:28:27
+-- Dump completed on 2026-09-15  9:18:36

@@ -57,7 +57,7 @@
 							<td><?php echo h($material->getDescripcion()); ?></td>
 							<td><?php echo h($material->getUnidad()); ?></td>
 							<td><?php echo h($_SESSION['solicitudCantidad'][$i]); ?></td>
-							<td><a class="btn btn-danger" href="?controller=Solicitud&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Quitar</a></td>
+							<td><a class="btn btn-danger btn-xs" href="?controller=Solicitud&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Quitar</a></td>
 						</tr>
 						<?php $i = $i + 1; ?>
 						<?php } ?>

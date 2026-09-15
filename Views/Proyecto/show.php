@@ -39,8 +39,8 @@
 								echo '-';
 							}
 						?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Proyecto&&action=updateshow&&id=<?php echo $proyecto->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Proyecto&&action=delete&&id=<?php echo $proyecto->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Proyecto&&action=updateshow&&id=<?php echo $proyecto->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Proyecto&&action=delete&&id=<?php echo $proyecto->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

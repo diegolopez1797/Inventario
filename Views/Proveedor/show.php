@@ -32,8 +32,8 @@
 					<tr>
 						<td><?php echo $proveedor->getId(); ?></td>
 						<td><?php echo h($proveedor->getDescripcion()); ?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Proveedor&&action=updateshow&&id=<?php echo $proveedor->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Proveedor&&action=delete&&id=<?php echo $proveedor->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Proveedor&&action=updateshow&&id=<?php echo $proveedor->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Proveedor&&action=delete&&id=<?php echo $proveedor->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

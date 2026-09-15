@@ -17,9 +17,9 @@
 						<td><?php echo $rol->getId(); ?></td>
 						<td><?php echo h($rol->getDescripcion()); ?></td>
 						<td>
-							<a class="btn btn-info" href="?controller=Rol&&action=permisos&&id=<?php echo $rol->getId(); ?>"><span class="glyphicon glyphicon-list-alt"> </span> Permisos</a>
-							<a id="boton-editar" class="btn btn-warning" href="?controller=Rol&&action=updateshow&&id=<?php echo $rol->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a>
-							<a id="boton-eliminar" class="btn btn-danger" href="?controller=Rol&&action=delete&&id=<?php echo $rol->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a>
+							<a class="btn btn-info btn-xs" href="?controller=Rol&&action=permisos&&id=<?php echo $rol->getId(); ?>"><span class="glyphicon glyphicon-list-alt"> </span> Permisos</a>
+							<a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Rol&&action=updateshow&&id=<?php echo $rol->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a>
+							<a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Rol&&action=delete&&id=<?php echo $rol->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a>
 						</td>
 					</tr>
 					<?php } ?>

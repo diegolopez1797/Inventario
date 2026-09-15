@@ -25,7 +25,8 @@
 	</div>
 	<?php } ?>
 
-	<table class="table table-bordered">
+	<div class="table-responsive">
+	<table class="table table-hover">
 		<thead>
 			<tr><th>Nivel</th><th>Cantidad generada</th></tr>
 		</thead>
@@ -36,6 +37,7 @@
 			<tr class="active"><td><strong>Total</strong></td><td><strong><?php echo (int)$resumen['totalGeneral']; ?></strong></td></tr>
 		</tbody>
 	</table>
+	</div>
 
 	<h4>Ejemplos por nivel</h4>
 	<?php foreach ($resumen['muestras'] as $muestra) { ?>

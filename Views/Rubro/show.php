@@ -30,8 +30,8 @@
 					<tr>
 						<td><?php echo $rubro->getId(); ?></td>
 						<td><?php echo h($rubro->getDescripcion()); ?></td>
-						<td><a id="boton-editar" class="btn btn-warning" href="?controller=Rubro&&action=updateshow&&id=<?php echo $rubro->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
-						<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=Rubro&&action=delete&&id=<?php echo $rubro->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
+						<td><a id="boton-editar" class="btn btn-warning btn-xs" href="?controller=Rubro&&action=updateshow&&id=<?php echo $rubro->getId(); ?>"><span class="glyphicon glyphicon-wrench"> </span> Editar</a></td>
+						<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=Rubro&&action=delete&&id=<?php echo $rubro->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-trash"> </span> Eliminar</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

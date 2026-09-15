@@ -35,8 +35,8 @@
 							<?php } ?>
 						</td>
 						<td>
-							<a class="btn btn-success" href="?controller=Solicitud&&action=aprobar&&id=<?php echo $solicitud->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-ok"> </span> Aprobar</a>
-							<a class="btn btn-danger" href="?controller=Solicitud&&action=rechazar&&id=<?php echo $solicitud->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-remove"> </span> Rechazar</a>
+							<a class="btn btn-success btn-xs" href="?controller=Solicitud&&action=aprobar&&id=<?php echo $solicitud->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-ok"> </span> Aprobar</a>
+							<a class="btn btn-danger btn-xs" href="?controller=Solicitud&&action=rechazar&&id=<?php echo $solicitud->getId(); ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-remove"> </span> Rechazar</a>
 						</td>
 					</tr>
 					<?php } ?>
@@ -76,7 +76,7 @@
 							<?php } ?>
 						</td>
 						<td>
-							<a class="btn btn-primary" href="?controller=Solicitud&&action=mostrarEntrega&&id=<?php echo $solicitud->getId(); ?>"><span class="glyphicon glyphicon-send"> </span> Entregar</a>
+							<a class="btn btn-primary btn-xs" href="?controller=Solicitud&&action=mostrarEntrega&&id=<?php echo $solicitud->getId(); ?>"><span class="glyphicon glyphicon-send"> </span> Entregar</a>
 						</td>
 					</tr>
 					<?php } ?>

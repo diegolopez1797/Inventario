@@ -46,7 +46,7 @@
 						<td><?php echo $fila['entradas']; ?></td>
 						<td><?php echo $fila['salidas']; ?></td>
 						<td><?php echo $fila['ajustes']; ?></td>
-						<td><a class="btn btn-warning" href="?controller=InformePorUsuario&action=detalle&usuario=<?php echo $fila['usuario']->getId(); ?>&fechaInicial=<?php echo h($fechaInicial); ?>&fechaFinal=<?php echo h($fechaFinal); ?>"><span class="glyphicon glyphicon-eye-open"> </span> Detalle</a></td>
+						<td><a class="btn btn-warning btn-xs" href="?controller=InformePorUsuario&action=detalle&usuario=<?php echo $fila['usuario']->getId(); ?>&fechaInicial=<?php echo h($fechaInicial); ?>&fechaFinal=<?php echo h($fechaFinal); ?>"><span class="glyphicon glyphicon-eye-open"> </span> Detalle</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

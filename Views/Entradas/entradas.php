@@ -118,7 +118,7 @@
 								</div>
 							</td>
 							<?php } ?>
-							<td><a id="boton-eliminar" class="btn btn-danger" href="?controller=RegistroEntradas&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Borrar</a></td>
+							<td><a id="boton-eliminar" class="btn btn-danger btn-xs" href="?controller=RegistroEntradas&&action=quitarMaterial&&id=<?php echo $i ?>&&csrf_token=<?php echo Csrf::token(); ?>"><span class="glyphicon glyphicon-erase"> </span> Borrar</a></td>
 						</tr>
 						<?php $i = $i + 1; ?>
 						<?php } ?>
